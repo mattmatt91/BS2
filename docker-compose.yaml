@@ -11,7 +11,7 @@ services:
       - operating_system=mock
     volumes:
       - ./data/images:/app/data
-      - ./data/configs/config.json:/app/config.json
+      - ./data/configs/config.json:/app/hardware/config.json
 
 
 

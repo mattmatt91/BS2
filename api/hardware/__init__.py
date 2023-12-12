@@ -12,6 +12,8 @@ def read_json_file(file_path):
         print(f"Error decoding JSON from file: {file_path}")
         return {}
     
+config = read_json_file("config.json")
+
 
 def create_path_if_not_exists(path):
     if not os.path.exists(path):
@@ -20,7 +22,6 @@ def create_path_if_not_exists(path):
        
 
 create_path_if_not_exists("app/data")
-config = read_json_file("config.json")
 
 
 
