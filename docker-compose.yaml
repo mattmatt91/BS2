@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  api:
+    build: 
+      context: ./api
+      dockerfile: Dockerfile  # Path to your FastAPI backend Dockerfile inside the `database` directory
+    ports:
+      - "8000:8000"  # Map the port to access the API
+    environment:
+      - operating_system=mock
+    volumes:
+      - ./data/images:/app/data
+
+
+
+  database:
+    build: 
+      context: ./database
+      dockerfile: Dockerfile  # Path to your FastAPI backend Dockerfile inside the `database` directory
+    ports:
+      - "6000:6000"  # Map the port to access the API
+    environment:
+      - operating_system=mock
+    depends_on:
+      - api
+    volumes:
+      - ./data/sensor_data:/app/data
+
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile  # Path to your frontend Dockerfile inside the `frontend` directory
+    ports:
+      - "3000:3000"  # Map the port to access the frontend
+
+# volumes:
+  # data:

@@ -1,0 +1,4 @@
+/api/venv
+/mock_api/venv
+/frontend/node_modules/
+data/
