@@ -2,28 +2,30 @@
 
 import requests
 from models import ParameterModel, ParameterUpdateModel
-from hardware import Sensor, Relais, Cam
+from hardware import Sensor, Relais, Cam, config
 from datetime import datetime
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 from apscheduler.triggers.cron import CronTrigger
 from converter_functions import ConverterFuncitons
 
-DATABASE_URL = "http://database:6000"
-
+DATABASE_URL = config["URLS"]["DATABASE_URL"] 
+schedule_intervals = config["schedule_intervals"]
+pin_assignment_relais = config["pin_assignment_relais"]
+pin_assignment_sensors = config["pin_assignment_sensors"]
 
 class Tasks:
-    sensor = Sensor()
-    relais = Relais({"lamp_bloom": 6, "lamp_grow": 7, "fan": 8})
+    sensor = Sensor(pin=pin_assignment_sensors["DHT"])
+    relais = Relais(pin_assignment_relais)
     cam = Cam()
     scheduler = AsyncIOScheduler()
     @staticmethod
     def start_scheduler():
 
         Tasks.scheduler.add_job(
-            Tasks.measure_data, trigger=IntervalTrigger(minutes=60))
+            Tasks.measure_data, trigger=IntervalTrigger(minutes=schedule_intervals["measure_data"]))
         Tasks.scheduler.add_job(
-            Tasks.store_image, trigger=IntervalTrigger(minutes=60))
+            Tasks.store_image, trigger=IntervalTrigger(minutes=schedule_intervals["capture_img"]))
         Tasks.scheduler.add_job(Tasks.toggle_lamp_on, trigger=CronTrigger(
             hour=0, minute=0), id="lamp_on")
         Tasks.scheduler.add_job(Tasks.toggle_lamp_off, trigger=CronTrigger(

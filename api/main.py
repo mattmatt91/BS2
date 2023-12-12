@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from converter_functions import ConverterFuncitons
 from models import ParameterModel, ParameterUpdateModel
 from tasks import Tasks
+from hardware import config
 
 app = FastAPI()
 
@@ -18,12 +19,7 @@ app.add_middleware(
 )
 
 # Configuration
-param_config = {
-    "Temperature": {"parameter": "Temperature", "datatype": "Float", "value": 23.5, "min_value": 15, "max_value": 30},
-    "Light": {"parameter": "Light", "datatype": "String", "value": "bloom", "entrys": ["bloom", "grow"]},
-    "Mode": {"parameter": "Mode", "datatype": "String", "value": "Auto", "entrys": ["Auto", "Manual", "Eco"]},
-    "StartRocket": {"parameter": "StartRocket", "datatype": "Bool", "value": True}
-}
+param_config = config["param_config"]
 
 
 # FastAPI routes

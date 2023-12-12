@@ -11,6 +11,7 @@ services:
       - operating_system=mock
     volumes:
       - ./data/images:/app/data
+      - ./data/configs/config.json:/app/config.json
 
 
 
@@ -26,6 +27,7 @@ services:
       - api
     volumes:
       - ./data/sensor_data:/app/data
+      - ./data/configs/config.json:/app/config.json
 
   frontend:
     build: 
