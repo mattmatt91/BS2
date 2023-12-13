@@ -1,0 +1,48 @@
+{
+    "param_config": {
+        "Temperature": {
+            "parameter": "Temperature",
+            "datatype": "Float",
+            "value": 23.5,
+            "min_value": 15,
+            "max_value": 30
+        },
+        "Light": {
+            "parameter": "Light",
+            "datatype": "String",
+            "value": "bloom",
+            "entrys": [
+                "bloom",
+                "grow"
+            ]
+        },
+        "Mode": {
+            "parameter": "Mode",
+            "datatype": "String",
+            "value": "Auto",
+            "entrys": [
+                "Auto",
+                "Manual",
+                "Eco"
+            ]
+        },
+        "StartRocket": {
+            "parameter": "StartRocket",
+            "datatype": "Bool",
+            "value": true
+        }
+    },
+    "URLS": {
+        "DATABASE_URL": "http://database:6000"
+    },
+    "schedule_intervals": {
+        "measure_data": 10,
+        "capture_img": 60
+    },
+    "pin_assignment_relais": {
+        "lamp_bloom": 6,
+        "lamp_grow": 7,
+        "fan": 8
+    },
+    "pin_assignment_sensors": {"DHT":2}
+}
