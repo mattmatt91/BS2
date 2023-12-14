@@ -1,4 +1,5 @@
-
+import csv
+import io
 
 class ConverterFuncitons:
     def convert_to_sensor_data(data_list):
@@ -16,3 +17,13 @@ class ConverterFuncitons:
 
     def transform_data(data):
         return [{"sensor": k, "Value": v} for item in data for k, v in item.items() if k != 'id']
+    
+    def generate_csv(data: list):
+        stream = io.StringIO()
+        writer = csv.DictWriter(stream, fieldnames=data[0].keys())
+        writer.writeheader()
+        for row in data:
+            writer.writerow(row)
+        
+        stream.seek(0)  # Move this outside the loop
+        return stream

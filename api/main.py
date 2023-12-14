@@ -2,6 +2,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 from converter_functions import ConverterFuncitons
 from models import ParameterModel, ParameterUpdateModel
 from tasks import Tasks
@@ -25,9 +26,9 @@ param_config = config["param_config"]
 # FastAPI routes
 @app.on_event("startup")
 async def start_tasks():
-    Tasks.init_tasks()
     for param_name, param_values in param_config.items():
         Tasks.set_parameter(ParameterModel(**param_values), init=True)
+    Tasks.init_tasks()
 
 
 @app.get("/video")
@@ -46,7 +47,9 @@ async def api_set_parameter(param: ParameterUpdateModel):
 
 @app.get("/parameter")
 async def get_parameter():
-    return [param for param in Tasks.get_parameter()]
+    parameter = Tasks.get_parameter()
+    print(parameter)
+    return [parameter[param] for param in parameter]
 
 
 @app.get("/sensor-data")
@@ -56,5 +59,11 @@ def api_sensor_data():
 
 @app.get("/data")
 def get_data():
-    measuring_data = Tasks.get_data()
-    return ConverterFuncitons.transform_data(measuring_data.json())
+    measuring_data = Tasks.get_data().json()
+    return ConverterFuncitons.transform_data(measuring_data)
+
+
+@app.get("/data_download")
+def get_data():
+    data = Tasks.get_data().json()
+    return StreamingResponse(ConverterFuncitons.generate_csv(data), media_type="text/csv", headers={"Content-Disposition": "attachment;filename=data.csv"})
