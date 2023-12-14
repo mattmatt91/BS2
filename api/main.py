@@ -24,8 +24,8 @@ param_config = config["param_config"]
 
 # FastAPI routes
 @app.on_event("startup")
-async def start_scheduler():
-    Tasks.start_scheduler()
+async def start_tasks():
+    Tasks.init_tasks()
     for param_name, param_values in param_config.items():
         Tasks.set_parameter(ParameterModel(**param_values), init=True)
 
@@ -37,10 +37,9 @@ def get_image():
 
 @app.post("/set_parameter")
 async def api_set_parameter(param: ParameterUpdateModel):
-    old_param = Tasks.get_parameter()
-    new_param_set = {p["parameter"]: p for p in old_param}
-    if param.parameter in new_param_set:
-        data = new_param_set[param.parameter]
+    new_parameter = Tasks.get_parameter()
+    if param.parameter in new_parameter:
+        data = new_parameter[param.parameter]
         data["value"] = param.value
         Tasks.set_parameter(ParameterModel(**data))
 

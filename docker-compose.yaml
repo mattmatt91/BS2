@@ -11,6 +11,8 @@ services:
       - operating_system=mock
     volumes:
       - ./data/images:/app/data
+    depends_on:
+      - database
 
 
 
@@ -22,8 +24,6 @@ services:
       - "6000:6000"  # Map the port to access the API
     environment:
       - operating_system=mock
-    depends_on:
-      - api
     volumes:
       - ./data/sensor_data:/app/data
 

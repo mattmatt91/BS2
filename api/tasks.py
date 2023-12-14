@@ -8,30 +8,47 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 from apscheduler.triggers.cron import CronTrigger
 from converter_functions import ConverterFuncitons
+from datetime import datetime
 
-DATABASE_URL = config["URLS"]["DATABASE_URL"] 
+DATABASE_URL = config["URLS"]["DATABASE_URL"]
 schedule_intervals = config["schedule_intervals"]
 pin_assignment_relais = config["pin_assignment_relais"]
 pin_assignment_sensors = config["pin_assignment_sensors"]
+
 
 class Tasks:
     sensor = Sensor(pin=pin_assignment_sensors["DHT"])
     relais = Relais(pin_assignment_relais)
     cam = Cam()
     scheduler = AsyncIOScheduler()
+
     @staticmethod
     def start_scheduler():
-
         Tasks.scheduler.add_job(
             Tasks.measure_data, trigger=IntervalTrigger(minutes=schedule_intervals["measure_data"]))
         Tasks.scheduler.add_job(
             Tasks.store_image, trigger=IntervalTrigger(minutes=schedule_intervals["capture_img"]))
         Tasks.scheduler.add_job(Tasks.toggle_lamp_on, trigger=CronTrigger(
             hour=0, minute=0), id="lamp_on")
+        hour = 12 if Tasks.get_parameter()["Light"]["value"] == "bloom" else 18
         Tasks.scheduler.add_job(Tasks.toggle_lamp_off, trigger=CronTrigger(
-            hour=18, minute=0), id="lamp_off")
-
+            hour=hour, minute=0), id="lamp_off")
         Tasks.scheduler.start()
+
+    @staticmethod
+    def init_lamp():
+        parameter = Tasks.get_parameter()["Light"]
+        time_off = 12 if parameter == "bloom" else 18
+        time_now = time_now = datetime.now().hour
+        if time_off > time_now:
+            Tasks.toggle_lamp_on()
+        elif time_off <= time_now:
+            Tasks.toggle_lamp_off()
+
+    @staticmethod
+    def init_tasks():
+        Tasks.start_scheduler()
+        Tasks.init_lamp()
 
     @staticmethod
     def sensor_data():
@@ -76,8 +93,8 @@ class Tasks:
 
     @staticmethod
     def toggle_lamp_on():
-        lamp = "lamp_bloom" if Tasks.get_parameter()["Light"]["value"] == "bloom" else "lamp_grow"
-        lamp = "lamp_bloom" if Tasks.get_parameter()["Light"]["value"] == "bloom" else "lamp_grow"
+        lamp = "lamp_bloom" if Tasks.get_parameter(
+        )["Light"]["value"] == "bloom" else "lamp_grow"
         Tasks.relais.operate_relais({lamp: True})
 
     @staticmethod
@@ -90,14 +107,15 @@ class Tasks:
 
     @staticmethod
     def get_parameter():
-        data =  requests.get(f"{DATABASE_URL}/get_parameter").json()
+        data = requests.get(f"{DATABASE_URL}/get_parameter").json()
+        data = {p["parameter"]: p for p in data}
         return data
 
     @staticmethod
     def store_image():
         img = Tasks.cam.capture()
         Tasks.cam.save_image(img)
-    
+
     @staticmethod
     def stream_image():
         img = Tasks.cam.capture()
