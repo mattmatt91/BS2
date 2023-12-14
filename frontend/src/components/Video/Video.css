@@ -1,0 +1,14 @@
+/* Video.css */
+
+.image-container {
+    width: 50%; /* Container takes full width of its parent */
+    text-align: center; /* Centers the image if it's smaller than the container width */
+    overflow: hidden; /* Ensures no overflow if image is larger than container */
+}
+
+.image-container img {
+    width: 100%; /* Image takes full width of its container */
+    height: auto; /* Maintains the aspect ratio of the image */
+    display: block; /* Removes default inline behavior of img */
+    margin: 0 auto; /* Centers the image horizontally */
+}

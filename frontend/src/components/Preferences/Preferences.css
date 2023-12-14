@@ -1,0 +1,25 @@
+/* Preferences.css */
+
+.preferences-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr; /* Adjust the ratio of columns as needed */
+    gap: 10px; /* Space between rows and columns */
+    max-width: 600px; /* Adjust the maximum width as needed */
+    margin: auto; /* Centering the grid */
+}
+
+.preference-row {
+    display: contents; /* Makes the children (label and control) part of the grid */
+}
+
+.preference-label {
+    grid-column: 1; /* Places the label in the first column */
+    text-align: right; /* Right aligns the text of labels */
+    padding-right: 10px; /* Space between the label and the control */
+    align-self: center; /* Vertically centers the label */
+}
+
+.preference-control {
+    grid-column: 2; /* Places the control in the second column */
+    align-self: center; /* Vertically centers the control */
+}

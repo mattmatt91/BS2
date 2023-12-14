@@ -1,0 +1,16 @@
+.header {
+  display: flex;
+  height: 10%;
+}
+
+.button {
+  flex: 1;
+  background-color: #4c956d;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.active {
+  background-color: #468b61;
+}
