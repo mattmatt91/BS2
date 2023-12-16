@@ -8,7 +8,7 @@ const Monitor: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:8000/sensor-data'); // Change to the actual API endpoint
+        const response = await fetch('http://192.168.1.30:8000/sensor-data'); // Change to the actual API endpoint
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }

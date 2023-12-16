@@ -8,7 +8,7 @@ const ImageComponent = () => {
   useEffect(() => {
     const fetchImage = async () => {
       try {
-        const response = await fetch('http://localhost:8000/video'); // Make sure the URL is correct
+        const response = await fetch('http://192.168.1.30:8000/video'); // Make sure the URL is correct
         if (response.ok) {
           const blob = await response.blob();
           setImageSrc(URL.createObjectURL(blob));

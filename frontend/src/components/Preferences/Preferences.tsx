@@ -16,7 +16,7 @@ const ParameterComponent: React.FC = () => {
   useEffect(() => {
     const fetchParameters = async () => {
       try {
-        const response = await fetch('http://localhost:8000/parameter');
+        const response = await fetch('http://192.168.1.30:8000/parameter');
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -32,7 +32,7 @@ const ParameterComponent: React.FC = () => {
 
   const handleChange = async (paramName: string, newValue: boolean | number | string) => {
     try {
-      const response = await fetch('http://localhost:8000/set_parameter', {
+      const response = await fetch('http://192.168.1.30:8000/set_parameter', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
