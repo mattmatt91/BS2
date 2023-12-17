@@ -18,11 +18,11 @@ copy_folder() {
 }
 
 
+ssh "${SSH_USER}@${SSH_SERVER}" "cd ${DEST_DIR} && rm -rf frontend && mkdir frontend"
 # Copy folders
 copy_folder "$FOLDER1"
 copy_folder "$FOLDER2"
 copy_folder "$FOLDER3"
-
 
 
 # Copy additional files
@@ -33,4 +33,4 @@ done
 # Run Docker Compose
 
 
-ssh "${SSH_USER}@${SSH_SERVER}" "cd ${DEST_DIR} && docker-compose up"
+ssh "${SSH_USER}@${SSH_SERVER}" "cd ${DEST_DIR} && docker-compose down && docker-compose up --build"

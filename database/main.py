@@ -11,7 +11,7 @@ db = Database("/app/data/my_database.db")  # Initialize your database with the p
 app.add_middleware(
     CORSMiddleware,
     # Replace with your React app's origin
-    allow_origins=["http://api:6000"],
+    allow_origins=["http://api"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

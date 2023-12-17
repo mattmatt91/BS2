@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './Preferences.css'; // Make sure this path is correct
+import './Preferences.css';
 
 interface Parameter {
   parameter: string;
@@ -14,9 +14,16 @@ const ParameterComponent: React.FC = () => {
   const [parameters, setParameters] = useState<Parameter[]>([]);
 
   useEffect(() => {
+    const apiUrl = process.env.REACT_APP_API_HOSTNAME;
+    const endpoint = `${apiUrl}/parameter`;
     const fetchParameters = async () => {
       try {
-        const response = await fetch('http://192.168.1.30:8000/parameter');
+        const token = localStorage.getItem('token');
+        const response = await fetch(endpoint, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -31,15 +38,19 @@ const ParameterComponent: React.FC = () => {
   }, []);
 
   const handleChange = async (paramName: string, newValue: boolean | number | string) => {
+    const apiUrl = process.env.REACT_APP_API_HOSTNAME;
+    const endpoint = `${apiUrl}/set_parameter`;
     try {
-      const response = await fetch('http://192.168.1.30:8000/set_parameter', {
+      const token = localStorage.getItem('token');
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({ parameter: paramName, value: newValue }),
       });
-      console.log(JSON.stringify({ parameter: paramName, value: newValue }))
+
       if (!response.ok) {
         const errorBody = await response.text();
         console.error('Response error:', response.status, errorBody);
@@ -71,6 +82,7 @@ const ParameterComponent: React.FC = () => {
     </div>
   );
 };
+
 
 const renderControl = (param: Parameter, handleChange: Function) => {
   switch (param.datatype) {

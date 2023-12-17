@@ -1,14 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import './Video.css'; // Import the CSS file
-
+import './Video.css';
 
 const ImageComponent = () => {
   const [imageSrc, setImageSrc] = useState('');
 
   useEffect(() => {
     const fetchImage = async () => {
+      const apiUrl = process.env.REACT_APP_API_HOSTNAME; // Read the environment variable
+      const endpoint = `${apiUrl}/video`; // Use a template string to create the endpoint
+      const token = localStorage.getItem('token'); // Retrieve the stored token
+
       try {
-        const response = await fetch('http://192.168.1.30:8000/video'); // Make sure the URL is correct
+        const response = await fetch(endpoint, {
+          headers: {
+            'Authorization': `Bearer ${token}` // Include the token in the request
+          }
+        });
+
         if (response.ok) {
           const blob = await response.blob();
           setImageSrc(URL.createObjectURL(blob));

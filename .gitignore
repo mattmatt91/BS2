@@ -2,3 +2,5 @@
 /mock_api/venv
 /frontend/node_modules/
 data/
+*/venv
+*/credentials.json
