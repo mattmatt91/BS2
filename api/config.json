@@ -10,7 +10,7 @@
         "Light": {
             "parameter": "Light",
             "datatype": "String",
-            "value": "bloom",
+            "value": "grow",
             "entrys": [
                 "bloom",
                 "grow"

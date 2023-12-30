@@ -16,53 +16,78 @@ pin_assignment_relais = config["pin_assignment_relais"]
 pin_assignment_sensors = config["pin_assignment_sensors"]
 
 
+class TestTaks():
+    def __init__(self) -> None:
+        print("test_init")
+
 class Tasks:
-    sensor = Sensor(pin=pin_assignment_sensors["DHT"])
-    relais = Relais(pin_assignment_relais)
-    cam = Cam()
-    scheduler = AsyncIOScheduler()
+    def __init__(self) -> None:
+        print("init task instance")
+        # self.scheduler = AsyncIOScheduler()
+        # self.sensor = Sensor(pin=pin_assignment_sensors["DHT"])
+        # print(pin_assignment_relais)
+        # self.relais = Relais(pin_assignment_relais)
+        # print(self.relais)
+        # self.cam = Cam()
+    
 
-    @staticmethod
-    def start_scheduler():
-        Tasks.scheduler.add_job(
-            Tasks.measure_data, trigger=IntervalTrigger(minutes=schedule_intervals["measure_data"]))
-        Tasks.scheduler.add_job(
-            Tasks.store_image, trigger=IntervalTrigger(minutes=schedule_intervals["capture_img"]))
-        Tasks.scheduler.add_job(Tasks.toggle_lamp_on, trigger=CronTrigger(
-            hour=0, minute=0), id="lamp_on")
-        hour = 12 if Tasks.get_parameter()["Light"]["value"] == "bloom" else 18
-        Tasks.scheduler.add_job(Tasks.toggle_lamp_off, trigger=CronTrigger(
-            hour=hour, minute=0), id="lamp_off")
-        Tasks.scheduler.start()
 
-    @staticmethod
-    def init_lamp():
-        parameter = Tasks.get_parameter()["Light"]
-        time_off = 12 if parameter == "bloom" else 18
-        time_now = time_now = datetime.now().hour
+    @classmethod
+    async def initialize(cls):
+            print("initilize")
+            instance = cls()
+            #await instance.init_lamp()
+            #await instance.start_scheduler()   
+            return instance
+
+
+    async def start_scheduler(self):
+        # Schedule tasksr
+        self.scheduler.add_job(
+            self.measure_data,
+            trigger=IntervalTrigger(minutes=schedule_intervals["measure_data"])
+        )
+        self.scheduler.add_job(
+            self.store_image,
+            trigger=IntervalTrigger(minutes=schedule_intervals["capture_img"])
+        )
+        parameter = await self.get_parameter()
+        bloom_hour = 12 if parameter["Light"]["value"] == "bloom" else 18
+        self.scheduler.add_job(
+            self.toggle_lamp_on,
+            trigger=CronTrigger(hour=0, minute=0, second=0),
+            id="lamp_on"
+        )
+        self.scheduler.add_job(
+            self.toggle_lamp_off,
+            trigger=CronTrigger(hour=0, minute=0, second=bloom_hour),
+            id="lamp_off"
+        )
+        self.scheduler.start()
+        print("scheduler started")
+
+    async def init_lamp(self):
+        parameter = await self.get_parameter()
+        time_off = 12 if parameter["Light"]["value"] == "bloom" else 18
+        time_now = datetime.now().hour
+        
         if time_off > time_now:
-            Tasks.toggle_lamp_on()
+            await self.toggle_lamp_on()
         elif time_off <= time_now:
-            Tasks.toggle_lamp_off()
+            await self.toggle_lamp_off()
 
-    @staticmethod
-    def init_tasks():
-        Tasks.start_scheduler()
-        Tasks.init_lamp()
-
-    @staticmethod
-    def sensor_data():
+    async def sensor_data(self):
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        data = Tasks.sensor.fetch_data()
+        data = self.sensor.fetch_data()
         sensor_data = [{"sensor": "timestamp", "Value": current_time}]
         sensor_data += [{"sensor": k, "Value": v} for k, v in data.items()]
-        relais_states = Tasks.relais.get_states()
+        relais_states = self.relais.get_states()
         sensor_data += [{"sensor": k, "Value": v}
                         for k, v in relais_states.items()]
         return sensor_data
 
-    @staticmethod
-    def set_parameter(param: ParameterModel, init=False):
+    async def set_parameter(self, param: ParameterModel, init=False):
+        print(f"setting parameter {param}")
         if init:
             requests.post(f"{DATABASE_URL}/init_parameter", json=param.dict())
         else:
@@ -70,53 +95,49 @@ class Tasks:
 
             # Special tasks for changes
         if param.parameter == "Light":
-            Tasks.update_light(param.value)
+            await self.update_light(param.value)
 
-    @staticmethod
-    def update_light(lamp):
-        # Logic to handle light update
+    async def update_light(self, lamp):
         if lamp == "bloom":
-            hour = 12
+            hour_off = 12
         else:
-            hour = 18
-        # Reschedule the task or perform other actions based on the new lamp value
-        # Assuming you have a scheduler job to modify, e.g., "lamp_on" or "lamp_off"
-        job = Tasks.scheduler.get_job("lamp_on")
+            hour_off = 18
+        print(f"from update light: seconds{hour_off}, lamp = {lamp}")
+        job = self.scheduler.get_job("lamp_off")
         if job:
-            job.reschedule(trigger=CronTrigger(hour=hour, minute=0))
+            job.reschedule(trigger=CronTrigger(
+                hour=0, minute=0, second=hour_off))
 
-    @staticmethod
-    def measure_data():
-        data = Tasks.sensor_data()
+    async def measure_data(self):
+        data = await self.sensor_data()
+        print("measure data")
         sensor_data = ConverterFuncitons.convert_to_sensor_data(data)
         requests.post(f"{DATABASE_URL}/add_sensor_data", json=sensor_data)
 
-    @staticmethod
-    def toggle_lamp_on():
-        lamp = "lamp_bloom" if Tasks.get_parameter(
-        )["Light"]["value"] == "bloom" else "lamp_grow"
-        Tasks.relais.operate_relais({lamp: True})
+    async def toggle_lamp_on(self):
+        param = await self.get_parameter()
+        print(param["Light"]["value"]) #  == "bloom" else "lamp_grow"
+        lamp = "lamp_bloom" 
+        print(f"toggling lamp on= {lamp}")
+        self.relais.operate_relais({lamp: True})
 
-    @staticmethod
-    def toggle_lamp_off():
-        Tasks.relais.operate_relais({"lamp_bloom": False, "lamp_grow": False})
+    async def toggle_lamp_off(self):
+        print("toggling light off")
+        await self.relais.operate_relais({"lamp_bloom": False, "lamp_grow": False})
 
-    @staticmethod
-    def get_data():
+    async def get_data(self):
         return requests.get(f"{DATABASE_URL}/get_measuring_data")
 
-    @staticmethod
-    def get_parameter():
+    async def get_parameter(self):
         data = requests.get(f"{DATABASE_URL}/get_parameter").json()
         data = {p["parameter"]: p for p in data}
         return data
 
-    @staticmethod
-    def store_image():
-        img = Tasks.cam.capture()
-        Tasks.cam.save_image(img)
+    async def store_image(self):
+        img = self.cam.capture()
+        self.cam.save_image(img)
 
-    @staticmethod
-    def stream_image():
-        img = Tasks.cam.capture()
-        return Tasks.cam.format_for_serving(img)
+    async def stream_image(self):
+        img = self.cam.capture()
+        return self.cam.format_for_serving(img)
+

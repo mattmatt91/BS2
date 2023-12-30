@@ -24,7 +24,7 @@ def create_path_if_not_exists(path):
         print(f"Created directory: {path}")
 
 
-create_path_if_not_exists("/data")
+# create_path_if_not_exists("/data")
 
 
 operating_mode = os.environ.get('operating_system', 'default')

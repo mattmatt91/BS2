@@ -2,39 +2,39 @@ version: '3.8'
 
 services:
   api:
-    build: 
+    build:
       context: ./api
-      dockerfile: Dockerfile  # Path to your FastAPI backend Dockerfile inside the `database` directory
+      dockerfile: Dockerfile # Path to your FastAPI backend Dockerfile inside the `database` directory
     ports:
-      - "8000:8000"  # Map the port to access the API
+      - "8000:8000" # Map the port to access the API
     environment:
       - operating_system=mock
     volumes:
       - ./data/images:/app/data
     depends_on:
       - database
-
-
+    restart: always
 
   database:
-    build: 
+    build:
       context: ./database
-      dockerfile: Dockerfile  # Path to your FastAPI backend Dockerfile inside the `database` directory
+      dockerfile: Dockerfile # Path to your FastAPI backend Dockerfile inside the `database` directory
     ports:
-      - "6000:6000"  # Map the port to access the API
+      - "6000:6000" # Map the port to access the API
     environment:
       - operating_system=mock
     volumes:
       - ./data/sensor_data:/app/data
-
+    restart: always
 
   frontend:
-    build: 
+    build:
       context: ./frontend
-      dockerfile: Dockerfile  # Path to your frontend Dockerfile inside the `frontend` directory
+      dockerfile: Dockerfile # Path to your frontend Dockerfile inside the `frontend` directory
     ports:
-      - "3000:3000"  # Map the port to access the frontend
+      - "3000:3000" # Map the port to access the frontend
     environment:
-      - REACT_APP_API_HOSTNAME=http://192.168.1.30:8000
-# volumes:
+      - REACT_APP_API_HOSTNAME=http://192.168.1.41:8000
+    restart: always
+  # volumes:
   # data:
