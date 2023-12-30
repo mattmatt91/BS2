@@ -7,7 +7,7 @@ class Tasks():
     def __init__(self) -> None:
         print("init task instance")
         self.scheduler = AsyncIOScheduler()
-        self.start_scheduler()
+
 
     async def start_scheduler(self):
         # Schedule tasks
