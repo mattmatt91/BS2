@@ -7,7 +7,11 @@ except:
 app = FastAPI()
 
 @app.on_event("startup")
+@app.get("/startup")
 async def start_tasks():
-    tasks = Tasks()
-    await tasks.start_scheduler()
     print("startup ...")
+    tasks = Tasks()
+    print(tasks)
+
+    await tasks.start_scheduler()
+
