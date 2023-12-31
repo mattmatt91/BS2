@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from converter_functions import ConverterFuncitons
 from models import ParameterModel, ParameterUpdateModel
-# from tasks import Tasks
+from tasks import Tasks
 from hardware import config
 import json
 # from fastapi import FastAPI, Depends, HTTPException, status
@@ -14,7 +14,7 @@ import json
 
 
 # Configuration
-param_config = config["param_config"]
+#param_config = config["param_config"]
 
 
 
@@ -23,8 +23,7 @@ param_config = config["param_config"]
 #     fake_users_db = json.load(file)
 
 app = FastAPI()
-# tasks = None
-
+tasks = Tasks()
 
 
 # Middleware (CORS)
@@ -37,13 +36,14 @@ app.add_middleware(
 )
 
 
+@app.get("/startup")
 @app.on_event("startup")
-def start_tasks():
+async def start_tasks():
     print("startup ")
-    # global tasks
-    # tasks = await Tasks.initialize()
+    await tasks.initialize()
+    
     # for param_name, param_values in param_config.items():
-    #     await tasks.set_parameter(ParameterModel(**param_values), init=True)
+    #    await tasks.set_parameter(ParameterModel(**param_values), init=True)
 
 
 # # User Registration

@@ -16,29 +16,22 @@ pin_assignment_relais = config["pin_assignment_relais"]
 pin_assignment_sensors = config["pin_assignment_sensors"]
 
 
-class TestTaks():
-    def __init__(self) -> None:
-        print("test_init")
+
 
 class Tasks:
     def __init__(self) -> None:
         print("init task instance")
-        # self.scheduler = AsyncIOScheduler()
-        # self.sensor = Sensor(pin=pin_assignment_sensors["DHT"])
-        # print(pin_assignment_relais)
-        # self.relais = Relais(pin_assignment_relais)
-        # print(self.relais)
-        # self.cam = Cam()
+        self.scheduler = AsyncIOScheduler()
     
 
-
-    @classmethod
-    async def initialize(cls):
-            print("initilize")
-            instance = cls()
-            #await instance.init_lamp()
-            #await instance.start_scheduler()   
-            return instance
+    async def initialize(self):
+        print("initilize")
+        self.sensor = Sensor(pin=pin_assignment_sensors["DHT"])
+        self.relais = Relais(pin_assignment_relais)
+        self.cam = Cam()
+        await self.init_lamp()
+        await self.start_scheduler()   
+  
 
 
     async def start_scheduler(self):
