@@ -4,6 +4,8 @@ FROM python:3.9-slim
 # Install system dependencies required by OpenCV
 # Set environment variables
 ENV operating_system=mock
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
 # Set the working directory in the container
 WORKDIR /usr/src/app/

@@ -37,10 +37,11 @@ class Tasks():
     async def measure_data(self):
         print("measure data")
 
-async def main():
+"""async def main():
     task = Tasks()
     # Run the scheduler in the background
     await asyncio.sleep(10)  # or any other duration or logic to keep the script running
 
 if __name__ == "__main__":
     asyncio.run(main())
+"""

@@ -6,11 +6,22 @@ import Monitor from './components/Monitor/Monitor';
 import Data from './components/Data/Data';
 import Preferences from './components/Preferences/Preferences';
 import Video from './components/Video/Videos';
+import Authentication from './components/Authentification/Authentification';
 
 const App: React.FC = () => {
   const [activeButton, setActiveButton] = useState(0);
+  const [authToken, setAuthToken] = useState<string | null>(null);
+
+  const handleLogin = (token: string) => {
+    setAuthToken(token);
+    // Optionally, store the token in local storage or context for further requests
+  };
 
   const renderMainContent = () => {
+    if (!authToken) {
+      return <Authentication onLogin={handleLogin} />;
+    }
+
     switch (activeButton) {
       case 0:
         return <Monitor />;
@@ -27,7 +38,7 @@ const App: React.FC = () => {
 
   return (
     <div className="app">
-      <Header activeButton={activeButton} onButtonClick={setActiveButton} />
+      {authToken && <Header activeButton={activeButton} onButtonClick={setActiveButton} />}
       <main className="main">{renderMainContent()}</main>
     </div>
   );

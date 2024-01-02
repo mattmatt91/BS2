@@ -22,20 +22,13 @@ class Tasks:
     def __init__(self) -> None:
         print("init task instance")
         self.scheduler = AsyncIOScheduler()
-    
-
-    async def initialize(self):
-        print("initilize")
         self.sensor = Sensor(pin=pin_assignment_sensors["DHT"])
         self.relais = Relais(pin_assignment_relais)
         self.cam = Cam()
-        await self.init_lamp()
-        await self.start_scheduler()   
-  
-
+    
 
     async def start_scheduler(self):
-        # Schedule tasksr
+        await self.init_lamp()
         self.scheduler.add_job(
             self.measure_data,
             trigger=IntervalTrigger(minutes=schedule_intervals["measure_data"])
@@ -58,6 +51,9 @@ class Tasks:
         )
         self.scheduler.start()
         print("scheduler started")
+
+
+
 
     async def init_lamp(self):
         parameter = await self.get_parameter()
