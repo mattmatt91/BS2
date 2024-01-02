@@ -31,7 +31,7 @@ class Tasks:
         await self.init_lamp()
         self.scheduler.add_job(
             self.measure_data,
-            trigger=IntervalTrigger(minutes=schedule_intervals["measure_data"])
+            trigger=IntervalTrigger(minutes= schedule_intervals["measure_data"])
         )
         self.scheduler.add_job(
             self.store_image,
@@ -41,12 +41,12 @@ class Tasks:
         bloom_hour = 12 if parameter["Light"]["value"] == "bloom" else 18
         self.scheduler.add_job(
             self.toggle_lamp_on,
-            trigger=CronTrigger(hour=0, minute=0, second=0),
+            trigger=CronTrigger(second=0),
             id="lamp_on"
         )
         self.scheduler.add_job(
             self.toggle_lamp_off,
-            trigger=CronTrigger(hour=0, minute=0, second=bloom_hour),
+            trigger=CronTrigger(second=bloom_hour),
             id="lamp_off"
         )
         self.scheduler.start()
@@ -71,12 +71,13 @@ class Tasks:
         sensor_data = [{"sensor": "timestamp", "Value": current_time}]
         sensor_data += [{"sensor": k, "Value": v} for k, v in data.items()]
         relais_states = self.relais.get_states()
-        sensor_data += [{"sensor": k, "Value": v}
-                        for k, v in relais_states.items()]
+        sensor_data += [{"sensor": k, "Value": 1 if v else 0 if isinstance(v, bool) else v}
+                for k, v in relais_states.items()]
+        # print(sensor_data)
         return sensor_data
 
     async def set_parameter(self, param: ParameterModel, init=False):
-        print(f"setting parameter {param}")
+        # print(f"setting parameter {param}")
         if init:
             requests.post(f"{DATABASE_URL}/init_parameter", json=param.dict())
         else:
@@ -94,8 +95,7 @@ class Tasks:
         print(f"from update light: seconds{hour_off}, lamp = {lamp}")
         job = self.scheduler.get_job("lamp_off")
         if job:
-            job.reschedule(trigger=CronTrigger(
-                hour=0, minute=0, second=hour_off))
+            job.reschedule(trigger=CronTrigger(second=hour_off))
 
     async def measure_data(self):
         data = await self.sensor_data()
@@ -105,17 +105,17 @@ class Tasks:
 
     async def toggle_lamp_on(self):
         param = await self.get_parameter()
-        print(param["Light"]["value"]) #  == "bloom" else "lamp_grow"
-        lamp = "lamp_bloom" 
+        lamp = "lamp_bloom"  if param["Light"]["value"] == "bloom" else "lamp_grow"
         print(f"toggling lamp on= {lamp}")
         self.relais.operate_relais({lamp: True})
 
     async def toggle_lamp_off(self):
         print("toggling light off")
-        await self.relais.operate_relais({"lamp_bloom": False, "lamp_grow": False})
+        self.relais.operate_relais({"lamp_bloom": False, "lamp_grow": False})
 
     async def get_data(self):
-        return requests.get(f"{DATABASE_URL}/get_measuring_data")
+        data = requests.get(f"{DATABASE_URL}/get_measuring_data")
+        return data
 
     async def get_parameter(self):
         data = requests.get(f"{DATABASE_URL}/get_parameter").json()

@@ -29,4 +29,3 @@ async def start_tasks():
 @app.get("/startup")
 async def test_route():
     return "test"
-
