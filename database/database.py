@@ -36,17 +36,20 @@ class Database:
         existing_param = cursor.fetchone()
 
         entries_str = ",".join(parameter_data.entrys) if parameter_data.entrys else ""
-        
+
         if existing_param:
-            # Update existing parameter
-            self.conn.execute("UPDATE parameters SET datatype=?, value=?, min_value=?, max_value=?, entrys=? WHERE parameter=?",
-                              (parameter_data.datatype, parameter_data.value, parameter_data.min_value, parameter_data.max_value, entries_str, parameter_name))
-        elif init:
-            # Insert new parameter
-            self.conn.execute("INSERT INTO parameters (parameter, datatype, value, min_value, max_value, entrys) VALUES (?, ?, ?, ?, ?, ?)",
-                              (parameter_name, parameter_data.datatype, parameter_data.value, parameter_data.min_value, parameter_data.max_value, entries_str))
+            if not init:
+                # Update existing parameter only if init is False
+                self.conn.execute("UPDATE parameters SET datatype=?, value=?, min_value=?, max_value=?, entrys=? WHERE parameter=?",
+                                (parameter_data.datatype, parameter_data.value, parameter_data.min_value, parameter_data.max_value, entries_str, parameter_name))
+        else:
+            if init:
+                # Insert new parameter only if init is True and the parameter does not exist
+                self.conn.execute("INSERT INTO parameters (parameter, datatype, value, min_value, max_value, entrys) VALUES (?, ?, ?, ?, ?, ?)",
+                                (parameter_name, parameter_data.datatype, parameter_data.value, parameter_data.min_value, parameter_data.max_value, entries_str))
 
         self.conn.commit()
+
 
     def get_measuring_data(self):
         cursor = self.conn.execute("SELECT * FROM measuring_data")

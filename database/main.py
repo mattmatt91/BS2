@@ -39,7 +39,7 @@ async def store_parameter(parameter_data: ParameterData):
 async def init_parameter(parameter_data: ParameterData):
     # print(parameter_data)
     try:
-        db.add_parameter(parameter_data, init=True)
+        db.add_parameter(parameter_data, init=False)
         return {"message": "Parameter initialized successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

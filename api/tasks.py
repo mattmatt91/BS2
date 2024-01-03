@@ -31,7 +31,7 @@ class Tasks:
         await self.init_lamp()
         self.scheduler.add_job(
             self.measure_data,
-            trigger=IntervalTrigger(seconds= 10) # minutes= schedule_intervals["measure_data"])
+            trigger=IntervalTrigger(minutes= schedule_intervals["measure_data"])
         )
         self.scheduler.add_job(
             self.store_image,
@@ -88,12 +88,17 @@ class Tasks:
             await self.update_light(param.value)
 
     async def update_light(self, lamp):
+        print(lamp)
         if lamp == "bloom":
             hour_off = 12
         else:
             hour_off = 18
         print(f"from update light: seconds{hour_off}, lamp = {lamp}")
         job = self.scheduler.get_job("lamp_off")
+
+        #logic for lamp toggling
+         
+
         if job:
             job.reschedule(trigger=CronTrigger(second=hour_off))
 
