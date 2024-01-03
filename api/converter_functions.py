@@ -10,7 +10,7 @@ class ConverterFuncitons:
             if key in ['humidity', 'temperature']:
                 sensor_data[key] = float(value)
             elif key in ['lamp_bloom', 'lamp_grow', 'fan']:
-                sensor_data[key] = value == 'True'
+                sensor_data[key] = 'True' if value == 1 else False
             else:
                 sensor_data[key] = value
         return sensor_data

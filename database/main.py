@@ -19,6 +19,7 @@ app.add_middleware(
 
 @app.post("/add_sensor_data")
 async def add_sensor_data(sensor_data: SensorData):
+    print(sensor_data)
     try:
         db.add_data(sensor_data.dict())
         return {"message": "Sensor data added successfully"}

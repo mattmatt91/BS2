@@ -31,7 +31,7 @@ class Tasks:
         await self.init_lamp()
         self.scheduler.add_job(
             self.measure_data,
-            trigger=IntervalTrigger(minutes= schedule_intervals["measure_data"])
+            trigger=IntervalTrigger(seconds= 10) # minutes= schedule_intervals["measure_data"])
         )
         self.scheduler.add_job(
             self.store_image,
@@ -106,7 +106,7 @@ class Tasks:
     async def toggle_lamp_on(self):
         param = await self.get_parameter()
         lamp = "lamp_bloom"  if param["Light"]["value"] == "bloom" else "lamp_grow"
-        print(f"toggling lamp on= {lamp}")
+        print(f"toggling lamp on at {lamp}")
         self.relais.operate_relais({lamp: True})
 
     async def toggle_lamp_off(self):
