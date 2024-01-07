@@ -1,19 +1,28 @@
-import cv2
 import datetime
-import numpy as np
 from fastapi.responses import StreamingResponse
 from io import BytesIO
 from os.path import join
+from picamera import PiCamera
+from picamera.array import PiRGBArray
+import time
+import numpy as np
+
 class ImageCapturer:
     def __init__(self):
-        self.cap = cv2.VideoCapture(0)
-        if not self.cap.isOpened():
-            raise ValueError("Could not open the camera")
+        # Initialize the camera
+        self.camera = PiCamera()
+        self.stream = PiRGBArray(self.camera)
+        # Camera warm-up time
+        time.sleep(2)
 
     def capture(self):
-        ret, frame = self.cap.read()
-        if not ret:
-            raise RuntimeError("Failed to capture image")
+        # Capture an image to a NumPy array
+        self.camera.capture(self.stream, format='bgr')
+        # Extract the frame
+        frame = self.stream.array
+        # Clear the stream for the next frame
+        self.stream.truncate(0)
+        self.stream.seek(0)
         return frame
 
     def save_image(self, image):
@@ -27,7 +36,7 @@ class ImageCapturer:
         return StreamingResponse(BytesIO(encoded_image.tobytes()), media_type="image/png")
 
     def close(self):
-        self.cap.release()
+        self.camera.close()
 
 if __name__ == "__main__":
     # Example usage

@@ -8,11 +8,17 @@ services:
     ports:
       - "8000:8000" # Map the port to access the API
     environment:
-      - operating_system=mock
+      - operating_system=mommck
+      - ENVIRONMENT=raspi
     volumes:
       - ./data/images:/app/data
+    devices:  
+      - "/dev/i2c-1:/dev/i2c-1" 
+      - "/dev/gpiomem:/dev/gpiomem" 
+      - "/dev/vchiq:/dev/vchiq"
     depends_on:
       - database
+    privileged: true
     restart: always
 
   database:

@@ -12,17 +12,17 @@ class Relais:
         # Setup all relaiss as output and initialize them to closed (False)
         for pin in self.relaiss.values():
             GPIO.setup(pin, GPIO.OUT)
-            GPIO.output(pin, GPIO.LOW)
+            GPIO.output(pin, GPIO.HIGH)
 
-    def operate_vale(self, relais_operations):
-        # relais_operations is a list of dicts, each dict contains relais name and a Boolean
+    def operate_relais(self, relais_operations):
         for operation in relais_operations:
-            for relais, state in operation.items():
-                if relais in self.relaiss:
-                    GPIO.output(self.relaiss[relais], GPIO.HIGH if state else GPIO.LOW)
-                    self.relais_states[relais] = state
+                state = relais_operations[operation]
+                if operation in self.relaiss:
+                    self.relais_states[operation] = state
+                    GPIO.output(self.relaiss[operation], GPIO.LOW if state else GPIO.HIGH)
                 else:
-                    print(f"relais '{relais}' not found.")
+                    print(f"relais '{operation}' not found.")
+
 
     def get_relais_states(self):
         return self.relais_states

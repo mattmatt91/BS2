@@ -7,7 +7,7 @@ class ConverterFuncitons:
         for item in data_list:
             key = item['sensor']
             value = item['Value']
-            if key in ['humidity', 'temperature']:
+            if key in ['humidity', 'temperature', "pressure"]:
                 sensor_data[key] = float(value)
             elif key in ['lamp_bloom', 'lamp_grow', 'fan']:
                 sensor_data[key] = 'True' if value == 1 else False
