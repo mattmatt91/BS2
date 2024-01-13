@@ -5,6 +5,7 @@ class SensorData(BaseModel):
     timestamp: str
     humidity: float
     temperature: float
+    pressure:float
     lamp_bloom: bool
     lamp_grow: bool
     fan: bool

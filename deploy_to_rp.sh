@@ -32,5 +32,4 @@ done
 
 # Run Docker Compose
 
-
 ssh "${SSH_USER}@${SSH_SERVER}" "cd ${DEST_DIR} && docker-compose down && docker-compose up --build"

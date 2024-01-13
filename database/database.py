@@ -12,6 +12,7 @@ class Database:
                               timestamp TIMESTAMP,
                               humidity REAL,
                               temperature REAL,
+                              pressure REAL,
                               lamp_bloom BOOLEAN,
                               lamp_grow BOOLEAN,
                               fan BOOLEAN)''')
@@ -26,8 +27,8 @@ class Database:
         self.conn.commit()
 
     def add_data(self, sensor_data):
-        self.conn.execute("INSERT INTO measuring_data (timestamp, humidity, temperature, lamp_bloom, lamp_grow, fan) VALUES (?, ?, ?, ?, ?, ?)",
-                          (sensor_data['timestamp'], sensor_data['humidity'], sensor_data['temperature'], sensor_data['lamp_bloom'], sensor_data['lamp_grow'], sensor_data['fan']))
+        self.conn.execute("INSERT INTO measuring_data (timestamp, humidity, temperature, pressure, lamp_bloom, lamp_grow, fan) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                          (sensor_data['timestamp'], sensor_data['humidity'], sensor_data['temperature'], sensor_data['pressure'], sensor_data['lamp_bloom'], sensor_data['lamp_grow'], sensor_data['fan']))
         self.conn.commit()
 
     def add_parameter(self, parameter_data, init=False):
@@ -36,7 +37,6 @@ class Database:
         existing_param = cursor.fetchone()
 
         entries_str = ",".join(parameter_data.entrys) if parameter_data.entrys else ""
-
         if existing_param:
             if not init:
                 # Update existing parameter only if init is False

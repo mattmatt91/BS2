@@ -44,4 +44,5 @@ python-jose[cryptography]
 bme680==1.1.1
 numpy==1.26.3
 smbus2==0.4.3
-picamera==1.13
+Pillow
+opencv-python-headless

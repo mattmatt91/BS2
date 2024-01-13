@@ -41,12 +41,12 @@ class Tasks:
         bloom_hour = 12 if parameter["Light"]["value"] == "bloom" else 18
         self.scheduler.add_job(
             self.toggle_lamp_on,
-            trigger=CronTrigger(second=0),
+            trigger=CronTrigger(hour=0),
             id="lamp_on"
         )
         self.scheduler.add_job(
             self.toggle_lamp_off,
-            trigger=CronTrigger(second=bloom_hour),
+            trigger=CronTrigger(hour=bloom_hour),
             id="lamp_off"
         )
         self.scheduler.start()
@@ -77,14 +77,13 @@ class Tasks:
         return sensor_data
 
     async def set_parameter(self, param: ParameterModel, init=False):
-        # print(f"setting parameter {param}")
         if init:
             requests.post(f"{DATABASE_URL}/init_parameter", json=param.dict())
         else:
             requests.post(f"{DATABASE_URL}/store_parameter", json=param.dict())
 
             # Special tasks for changes
-        if param.parameter == "Light":
+        if param.parameter == "Light"  :
             await self.update_light(param.value)
 
     async def update_light(self, lamp):
@@ -105,7 +104,9 @@ class Tasks:
     async def measure_data(self):
         data = await self.sensor_data()
         print("measure data")
+        print(data)
         sensor_data = ConverterFuncitons.convert_to_sensor_data(data)
+        print(sensor_data)
         requests.post(f"{DATABASE_URL}/add_sensor_data", json=sensor_data)
 
     async def toggle_lamp_on(self):

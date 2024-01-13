@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    environment:
+      - READTHEDOCS=true
+      - LD_LIBRARY_PATH=/usr/lib/
+    volumes:
+      - /usr/lib/:/usr/lib/
+      - /home/bs2/Desktop/test_cam/images:/usr/src/app/images
+    devices:
+      - "/dev/vcsm:/dev/vcsm"
+      - "/dev/vchiq:/dev/vchiq"
+      - "/dev/video0:/dev/video0"
+      - "/dev/video1:/dev/video1"
+    privileged: true

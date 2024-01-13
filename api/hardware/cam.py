@@ -2,49 +2,59 @@ import datetime
 from fastapi.responses import StreamingResponse
 from io import BytesIO
 from os.path import join
-from picamera import PiCamera
-from picamera.array import PiRGBArray
+import cv2
+import os
+from time import sleep
 import time
 import numpy as np
+from PIL import Image
 
 class ImageCapturer:
     def __init__(self):
-        # Initialize the camera
-        self.camera = PiCamera()
-        self.stream = PiRGBArray(self.camera)
-        # Camera warm-up time
-        time.sleep(2)
+        self.camera = cv2.VideoCapture(0)
+        sleep(2)
 
     def capture(self):
-        # Capture an image to a NumPy array
-        self.camera.capture(self.stream, format='bgr')
-        # Extract the frame
-        frame = self.stream.array
-        # Clear the stream for the next frame
-        self.stream.truncate(0)
-        self.stream.seek(0)
-        return frame
+        # Capture an image using picamera2
+        ret, frame = self.camera.read()
+        if not ret:
+            raise Exception("Cam not found")
+        if ret:
+            return frame
+        else:
+            return None
+        
 
-    def save_image(self, image):
+    def save_image(self, frame):
         filename = datetime.datetime.now().strftime("%Y%m%d_%H%M%S") + ".png"
-        path = join("/app/data/", filename)
-        cv2.imwrite(filename, image)
+        path = join("data/", filename)
+        print("Current working directory:", os.getcwd())
+        # Save the image using PIL
+        try:
+            cv2.imwrite(path, frame)
+            print(f"taking image to {path}")
+        except Exception as e:
+            print(f"unable to save image: {e}")
         return filename
 
     def format_for_serving(self, image):
-        _, encoded_image = cv2.imencode('.png', image)
-        return StreamingResponse(BytesIO(encoded_image.tobytes()), media_type="image/png")
+        # Convert the image to PNG using PIL and serve
+        img = Image.fromarray(image)
+        buf = BytesIO()
+        img.save(buf, format='PNG')
+        buf.seek(0)
+        return StreamingResponse(buf, media_type="image/png")
 
     def close(self):
-        self.camera.close()
+        self.camera.release()
 
 if __name__ == "__main__":
     # Example usage
     capturer = ImageCapturer()
     try:
-        image = capturer.capture()
+        image, ret = capturer.capture()
         # Save the image
-        filename = capturer.save_image(image)
+        filename = capturer.save_image(image, ret)
         # Serve the image via FastAPI
         image_response = capturer.format_for_serving(image)
     finally:

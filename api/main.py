@@ -11,11 +11,11 @@ import json
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from authentification import Auhtentification, UserInDB
-
+import os
 
 # Configuration
 param_config = config["param_config"]
-
+os.makedirs('data/', exist_ok=True)
 
 
 # Load users database
@@ -40,10 +40,12 @@ app.add_middleware(
 @app.on_event("startup")
 async def start_tasks():
     print("startup...")
-    await tasks.start_scheduler()
-    
     for param_name, param_values in param_config.items():
-       await tasks.set_parameter(ParameterModel(**param_values), init=True)
+        await tasks.set_parameter(ParameterModel(**param_values), init=True)
+
+    await tasks.start_scheduler()
+
+    
 
 
 # User Registration

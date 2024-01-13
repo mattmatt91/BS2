@@ -4,18 +4,27 @@ services:
   api:
     build:
       context: ./api
-      dockerfile: Dockerfile # Path to your FastAPI backend Dockerfile inside the `database` directory
+      dockerfile: Dockerfile
     ports:
-      - "8000:8000" # Map the port to access the API
+      - "8000:8000"
     environment:
-      - operating_system=mommck
-      - ENVIRONMENT=raspi
+      - operating_system=raspi # mock for mock_hardware
+      - READTHEDOCS=true # needed for PiCamera
+      - URL_DATABASE=http://192.168.1.41:6000
+      - URL_FRONTEND=http://192.168.1.41:3000
+
+      - LD_LIBRARY_PATH=/usr/lib/
+
     volumes:
-      - ./data/images:/app/data
-    devices:  
-      - "/dev/i2c-1:/dev/i2c-1" 
-      - "/dev/gpiomem:/dev/gpiomem" 
+      - /home/bs2/Desktop/bs2/data/images:/usr/src/app/data
+      - /usr/lib/:/usr/lib/
+    devices:
+      - "/dev/vcsm:/dev/vcsm"
+      - "/dev/i2c-1:/dev/i2c-1"
+      - "/dev/gpiomem:/dev/gpiomem"
       - "/dev/vchiq:/dev/vchiq"
+      - "/dev/video0:/dev/video0"
+      - "/dev/video1:/dev/video1"
     depends_on:
       - database
     privileged: true
@@ -24,23 +33,23 @@ services:
   database:
     build:
       context: ./database
-      dockerfile: Dockerfile # Path to your FastAPI backend Dockerfile inside the `database` directory
+      dockerfile: Dockerfile
     ports:
-      - "6000:6000" # Map the port to access the API
-    environment:
-      - operating_system=mock
+      - "6000:6000"
     volumes:
-      - ./data/sensor_data:/app/data
+      - /home/bs2/Desktop/bs2/data/sensor_data:/usr/src/app/data
+    privileged: true
     restart: always
 
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile # Path to your frontend Dockerfile inside the `frontend` directory
+      dockerfile: Dockerfile
     ports:
-      - "3000:3000" # Map the port to access the frontend
+      - "3000:3000"
     environment:
       - REACT_APP_API_HOSTNAME=http://192.168.1.41:8000
     restart: always
-  # volumes:
-  # data:
+
+volumes:
+  Dockerdata:

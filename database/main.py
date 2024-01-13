@@ -2,12 +2,11 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from database import Database  # Import the Database class from database.py
 from models import SensorData, ParameterData  # Import your models from models.py
-
+import os
 
 app = FastAPI()
-
-db = Database("/app/data/my_database.db")  # Initialize your database with the path to your db file
-
+os.makedirs('data/', exist_ok=True)
+db = Database("data/my_database.db")  # Initialize your database with the path to your db file
 app.add_middleware(
     CORSMiddleware,
     # Replace with your React app's origin
@@ -19,12 +18,12 @@ app.add_middleware(
 
 @app.post("/add_sensor_data")
 async def add_sensor_data(sensor_data: SensorData):
-    print(sensor_data)
-    try:
-        db.add_data(sensor_data.dict())
-        return {"message": "Sensor data added successfully"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    db.add_data(sensor_data.dict())
+    # try:
+    #     db.add_data(sensor_data.dict())
+    #     return {"message": "Sensor data added successfully"}
+    # except Exception as e:
+    #     raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/store_parameter")
 async def store_parameter(parameter_data: ParameterData):
@@ -37,9 +36,8 @@ async def store_parameter(parameter_data: ParameterData):
 
 @app.post("/init_parameter")
 async def init_parameter(parameter_data: ParameterData):
-    # print(parameter_data)
     try:
-        db.add_parameter(parameter_data, init=False)
+        db.add_parameter(parameter_data, init=True)
         return {"message": "Parameter initialized successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
