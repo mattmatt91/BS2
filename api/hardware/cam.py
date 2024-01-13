@@ -11,12 +11,13 @@ from PIL import Image
 
 class ImageCapturer:
     def __init__(self):
-        self.camera = cv2.VideoCapture(0)
-        sleep(2)
+        pass
 
     def capture(self):
         # Capture an image using picamera2
+        self.camera = cv2.VideoCapture(0)
         ret, frame = self.camera.read()
+        self.camera.release()
         if not ret:
             raise Exception("Cam not found")
         if ret:
@@ -46,7 +47,7 @@ class ImageCapturer:
         return StreamingResponse(buf, media_type="image/png")
 
     def close(self):
-        self.camera.release()
+        pass
 
 if __name__ == "__main__":
     # Example usage
