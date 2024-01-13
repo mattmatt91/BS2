@@ -17,7 +17,7 @@ param_config = config["param_config"]
 os.makedirs("data/", exist_ok=True)
 
 
-# Load users database
+# Load login credentials
 with open("credentials.json", "r") as file:
     fake_users_db = json.load(file)
 
