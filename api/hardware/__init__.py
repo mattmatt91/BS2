@@ -4,7 +4,7 @@ import json
 
 def read_json_file(file_path):
     try:
-        with open(file_path, 'r') as file:
+        with open(file_path, "r") as file:
             return json.load(file)
     except FileNotFoundError:
         print(f"File not found: {file_path}")
@@ -17,17 +17,16 @@ def read_json_file(file_path):
 config = read_json_file("config.json")
 
 
-
-operating_mode = os.environ.get('operating_system', 'default')
+operating_mode = os.environ.get("operating_system", "default")
 print(operating_mode)
-if operating_mode == 'mock':
+if operating_mode == "mock":
     # Import mock classes
     from .sensor_mock import MockSensor as Sensor
     from .relais_mock import MockRelais as Relais
     from .cam_mock import MockImageCapturer as Cam
 elif operating_mode == "raspi":
     # from .sensor_mock import MockSensor as Sensor
-    #from .relais_mock import MockRelais as Relais
+    # from .relais_mock import MockRelais as Relais
     # from .cam_mock import MockImageCapturer as Cam
     # Import real sensor classes
     from .sensor import Sensor as Sensor

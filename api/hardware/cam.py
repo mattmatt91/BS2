@@ -9,6 +9,7 @@ import time
 import numpy as np
 from PIL import Image
 
+
 class ImageCapturer:
     def __init__(self):
         pass
@@ -24,7 +25,6 @@ class ImageCapturer:
             return frame
         else:
             return None
-        
 
     def save_image(self, frame):
         filename = datetime.datetime.now().strftime("%Y%m%d_%H%M%S") + ".png"
@@ -42,12 +42,13 @@ class ImageCapturer:
         # Convert the image to PNG using PIL and serve
         img = Image.fromarray(image)
         buf = BytesIO()
-        img.save(buf, format='PNG')
+        img.save(buf, format="PNG")
         buf.seek(0)
         return StreamingResponse(buf, media_type="image/png")
 
     def close(self):
         pass
+
 
 if __name__ == "__main__":
     # Example usage
