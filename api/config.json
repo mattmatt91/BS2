@@ -40,8 +40,8 @@
         "capture_img": 30
     },
     "pin_assignment_relais": {
-        "lamp_bloom": {"pin_o": 5, "pin_i":12},
-        "lamp_grow": {"pin_o": 6, "pin_i":16},
+        "lamp_grow": {"pin_o": 5, "pin_i":12},
+        "lamp_bloom": {"pin_o": 6, "pin_i":16},
         "fan": {"pin_o": 19, "pin_i":21},
         "pump": {"pin_o": 13, "pin_i":20}
     },
