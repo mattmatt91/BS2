@@ -1,5 +1,5 @@
 // src/App.tsx
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import Header from './components/Header/Header';
 import Monitor from './components/Monitor/Monitor';
@@ -7,10 +7,17 @@ import Data from './components/Data/Data';
 import Preferences from './components/Preferences/Preferences';
 import Video from './components/Video/Videos';
 import Authentication from './components/Authentification/Authentification';
+import {TOKEN_KEY} from './const'
 
 const App: React.FC = () => {
   const [activeButton, setActiveButton] = useState(0);
   const [authToken, setAuthToken] = useState<string | null>(null);
+
+  useEffect(()=>{
+    if(authToken == undefined){
+      setAuthToken(localStorage.getItem(TOKEN_KEY))
+    }
+  },[])
 
   const handleLogin = (token: string) => {
     setAuthToken(token);
