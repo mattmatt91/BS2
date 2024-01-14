@@ -1,6 +1,7 @@
 // src/components/Authentication/Authentication.tsx
 
 import React, { useState, FormEvent } from 'react';
+import { TOKEN_KEY } from '../../const';
 
 interface AuthenticationProps {
   onLogin: (token: string) => void;
@@ -26,7 +27,7 @@ const Authentication: React.FC<AuthenticationProps> = ({ onLogin }) => {
 
       const data = await response.json();
       if (response.ok) {
-        localStorage.setItem('token', data.access_token); // Store the token
+        localStorage.setItem(TOKEN_KEY, data.access_token); // Store the token
         onLogin(data.access_token); // Invoke the onLogin callback
       } else {
         console.error('Login failed:', data.detail);
@@ -39,17 +40,17 @@ const Authentication: React.FC<AuthenticationProps> = ({ onLogin }) => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <input 
-          type="text" 
-          value={username} 
+        <input
+          type="text"
+          value={username}
           onChange={(e) => setUsername(e.target.value)}
-          placeholder="Username" 
+          placeholder="Username"
         />
-        <input 
-          type="password" 
-          value={password} 
+        <input
+          type="password"
+          value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password" 
+          placeholder="Password"
         />
         <button type="submit">Login</button>
       </form>
