@@ -5,12 +5,14 @@ from fastapi.responses import StreamingResponse
 from converter_functions import ConverterFuncitons
 from models import ParameterModel, ParameterUpdateModel
 from tasks import Tasks
+from timelapse import Timelapse
 from hardware import config
 import json
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from authentification import Auhtentification, UserInDB
 import os
+import io
 
 # Configuration
 param_config = config["param_config"]
@@ -126,8 +128,17 @@ async def get_data(current_user: UserInDB = Depends(Auhtentification.get_current
 async def get_data(current_user: UserInDB = Depends(Auhtentification.get_current_user)):
     data = await tasks.get_data()
     data = data.json()
+
     return StreamingResponse(
         ConverterFuncitons.generate_csv(data),
         media_type="text/csv",
         headers={"Content-Disposition": "attachment;filename=data.csv"},
     )
+
+  
+@app.get("/video_download")
+async def download_video(current_user: UserInDB = Depends(Auhtentification.get_current_user)):
+    video_buffer = Timelapse.download_video()
+    return StreamingResponse(io.BytesIO(video_buffer), media_type="video/mp4",
+                             headers={"Content-Disposition": "attachment;filename=output.mp4"})
+

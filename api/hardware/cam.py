@@ -29,8 +29,6 @@ class ImageCapturer:
     def save_image(self, frame):
         filename = datetime.datetime.now().strftime("%Y%m%d_%H%M%S") + ".png"
         path = join("data/", filename)
-        print("Current working directory:", os.getcwd())
-        # Save the image using PIL
         try:
             cv2.imwrite(path, frame)
             print(f"taking image to {path}")
@@ -38,13 +36,20 @@ class ImageCapturer:
             print(f"unable to save image: {e}")
         return filename
 
+
+
+
     def format_for_serving(self, image):
-        # Convert the image to PNG using PIL and serve
-        img = Image.fromarray(image)
+        # Convert the image from BGR (OpenCV format) to RGB
+        image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+        # Convert the RGB image to PNG using PIL and serve
+        img = Image.fromarray(image_rgb)
         buf = BytesIO()
         img.save(buf, format="PNG")
         buf.seek(0)
         return StreamingResponse(buf, media_type="image/png")
+
 
     def close(self):
         pass

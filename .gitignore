@@ -1,6 +1,7 @@
 /api/venv
 /mock_api/venv
 /frontend/node_modules/
-data/
+data/sensor_data
+data/images
 */venv
 */credentials.json
