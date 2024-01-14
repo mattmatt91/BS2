@@ -18,12 +18,11 @@ app.add_middleware(
 
 @app.post("/add_sensor_data")
 async def add_sensor_data(sensor_data: SensorData):
-    db.add_data(sensor_data.dict())
-    # try:
-    #     db.add_data(sensor_data.dict())
-    #     return {"message": "Sensor data added successfully"}
-    # except Exception as e:
-    #     raise HTTPException(status_code=500, detail=str(e))
+    try:
+        db.add_data(sensor_data.dict())
+        return {"message": "Sensor data added successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/store_parameter")
 async def store_parameter(parameter_data: ParameterData):

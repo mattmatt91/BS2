@@ -29,8 +29,6 @@ class ImageCapturer:
     def save_image(self, frame):
         filename = datetime.datetime.now().strftime("%Y%m%d_%H%M%S") + ".png"
         path = join("data/", filename)
-        print("Current working directory:", os.getcwd())
-        # Save the image using PIL
         try:
             cv2.imwrite(path, frame)
             print(f"taking image to {path}")
