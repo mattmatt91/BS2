@@ -8,15 +8,15 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - operating_system=raspi # mock for mock_hardware
+      - "operating_system=${OS}" # mock for mock_hardware
       - READTHEDOCS=true # needed for PiCamera
-      - URL_DATABASE=http://192.168.1.41:6000
-      - URL_FRONTEND=http://192.168.1.41:3000
+      - "URL_DATABASE=http://${DB_HOST}:6000"
+      - "URL_FRONTEND=http://${PI_HOST}:3000"
 
       - LD_LIBRARY_PATH=/usr/lib/
 
     volumes:
-      - /home/bs2/Desktop/bs2/data/images:/usr/src/app/data
+      - ./data/images:/usr/src/app/data
       - /usr/lib/:/usr/lib/
     devices:
       - "/dev/vcsm:/dev/vcsm"
@@ -37,7 +37,7 @@ services:
     ports:
       - "6000:6000"
     volumes:
-      - /home/bs2/Desktop/bs2/data/sensor_data:/usr/src/app/data
+      - ./data/sensor_data:/usr/src/app/data
     privileged: true
     restart: always
 
@@ -48,7 +48,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - REACT_APP_API_HOSTNAME=http://192.168.1.41:8000
+      - "REACT_APP_API_HOSTNAME=http://${PI_HOST}:8000"
     restart: always
 
 volumes:

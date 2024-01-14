@@ -10,7 +10,7 @@ FOLDER1="frontend"
 FOLDER2="database"
 FOLDER3="api"
 
-ADDITIONAL_FILES=("docker-compose.yaml")
+ADDITIONAL_FILES=("docker-compose.yaml", ".env_prod")
 
 copy_folder() {
     local folder=$1
@@ -32,4 +32,4 @@ done
 
 # Run Docker Compose
 
-ssh "${SSH_USER}@${SSH_SERVER}" "cd ${DEST_DIR} && docker-compose down && docker-compose up --build"
+ssh "${SSH_USER}@${SSH_SERVER}" "cd ${DEST_DIR} && mv .env_prod .env && docker-compose down && docker-compose up --build"

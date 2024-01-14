@@ -9,8 +9,7 @@ DEST_DIR="/home/bs2/Desktop/bs2"
 
 FOLDER2="database"
 
-
-ADDITIONAL_FILES=("docker-compose.yaml")
+ADDITIONAL_FILES=("docker-compose.yaml", ".env_prod")
 
 copy_folder() {
     local folder=$1
@@ -33,4 +32,4 @@ done
 # Run Docker Compose
 
 
-ssh "${SSH_USER}@${SSH_SERVER}"  "cd ${DEST_DIR} && docker-compose down api && docker-compose up --build database"
+ssh "${SSH_USER}@${SSH_SERVER}"  "cd ${DEST_DIR} && mv .env_prod .env && docker-compose down api && docker-compose up --build database"
