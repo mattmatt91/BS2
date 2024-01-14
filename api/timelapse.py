@@ -6,40 +6,33 @@ import tempfile
 import shutil
 
 class Timelapse():
-    text_color = (0, 0, 255)  # Red color in BGR format
-    text_size = 1             # Font size
+    text_color = (0, 0, 255)  
+    text_size = 1             
     text_position = (80, 80)
     frame_size = (640, 480)
-    duration_per_image = 1
+    duration_per_image = 0.5
     frame_rate = 60 / duration_per_image
     directory = "data/"
-    output_video = 'timelapse.mp4'
-
-
 
     @classmethod
     def create_video_buffer(cls, image_paths):
-        with tempfile.NamedTemporaryFile(delete=False, suffix='.mp4') as temp_video_file:
-            # Create video and write to temporary file
+        # Create video and write to temporary file
+        with tempfile.NamedTemporaryFile(suffix='.mp4', delete=False) as temp_video_file:
             fourcc = cv2.VideoWriter_fourcc(*'mp4v')
             video = cv2.VideoWriter(temp_video_file.name, fourcc, cls.frame_rate, cls.frame_size)
-
-        for image_path in image_paths:
-            img = cv2.imread(image_path)
-            img = cv2.resize(img, cls.frame_size)
-            timestamp_str = os.path.splitext(os.path.basename(image_path))[0]
-            datetime_obj = datetime.strptime(timestamp_str, '%Y%m%d_%H%M%S')
-            formatted_time = datetime_obj.strftime('%d.%m.%Y %H:%M:%S')
-            cv2.putText(img, formatted_time, cls.text_position,
-                        cv2.FONT_HERSHEY_SIMPLEX, cls.text_size, cls.text_color, 2)
-            for _ in range(int(cls.frame_rate * cls.duration_per_image)):
-                video.write(img)
-        video.release()
+            for image_path in image_paths:
+                img = cv2.imread(image_path)
+                img = cv2.resize(img, cls.frame_size)
+                timestamp_str = os.path.splitext(os.path.basename(image_path))[0]
+                datetime_obj = datetime.strptime(timestamp_str, '%Y%m%d_%H%M%S')
+                formatted_time = datetime_obj.strftime('%d.%m.%Y %H:%M:%S')
+                cv2.putText(img, formatted_time, cls.text_position, cv2.FONT_HERSHEY_SIMPLEX, cls.text_size, cls.text_color, 2)
+                for _ in range(int(cls.frame_rate * cls.duration_per_image)):
+                    video.write(img)
+            video.release()
         with open(temp_video_file.name, 'rb') as file:
-                video_data = file.read()
-
+            video_data = file.read()
         os.remove(temp_video_file.name)
-
         return video_data
 
     @classmethod
@@ -61,5 +54,5 @@ class Timelapse():
     def download_video(cls):
         png_files = cls.list_png_files(cls.directory)
         sorted_file_paths = [png_files[key] for key in sorted(png_files)]
-        cls.create_video_buffer(sorted_file_paths)
+        return cls.create_video_buffer(sorted_file_paths)
 
