@@ -36,13 +36,20 @@ class ImageCapturer:
             print(f"unable to save image: {e}")
         return filename
 
+
+
+
     def format_for_serving(self, image):
-        # Convert the image to PNG using PIL and serve
-        img = Image.fromarray(image)
+        # Convert the image from BGR (OpenCV format) to RGB
+        image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+        # Convert the RGB image to PNG using PIL and serve
+        img = Image.fromarray(image_rgb)
         buf = BytesIO()
         img.save(buf, format='PNG')
         buf.seek(0)
         return StreamingResponse(buf, media_type="image/png")
+
 
     def close(self):
         pass
