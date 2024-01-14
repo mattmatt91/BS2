@@ -1,4 +1,3 @@
-
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -17,10 +16,10 @@ import io
 
 # Configuration
 param_config = config["param_config"]
-os.makedirs('data/', exist_ok=True)
+os.makedirs("data/", exist_ok=True)
 
 
-# Load users database
+# Load login credentials
 with open("credentials.json", "r") as file:
     fake_users_db = json.load(file)
 
@@ -47,18 +46,17 @@ async def start_tasks():
 
     await tasks.start_scheduler()
 
-    
-
 
 # User Registration
 @app.post("/register/")
 async def register_user(username: str, password: str):
     if username in Auhtentification.fake_users_db:
-        raise HTTPException(
-            status_code=400, detail="Username already registered")
+        raise HTTPException(status_code=400, detail="Username already registered")
     hashed_password = Auhtentification.hash_password(password)
-    Auhtentification.fake_users_db[username] = {"username": username,
-                               "hashed_password": hashed_password}
+    Auhtentification.fake_users_db[username] = {
+        "username": username,
+        "hashed_password": hashed_password,
+    }
     return {"message": "User created successfully"}
 
 
@@ -68,31 +66,35 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     user = Auhtentification.fake_users_db.get(form_data.username)
     if not user:
         print("User not found.")  # Debugging
-        raise HTTPException(
-            status_code=401, detail="Incorrect username or password")
-    if not Auhtentification.verify_password(form_data.password, user["hashed_password"]):
+        raise HTTPException(status_code=401, detail="Incorrect username or password")
+    if not Auhtentification.verify_password(
+        form_data.password, user["hashed_password"]
+    ):
         print("Password verification failed.")  # Debugging
-        raise HTTPException(
-            status_code=401, detail="Incorrect username or password")
-    access_token = Auhtentification.create_access_token(
-        data={"sub": user["username"]})
+        raise HTTPException(status_code=401, detail="Incorrect username or password")
+    access_token = Auhtentification.create_access_token(data={"sub": user["username"]})
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-
-
 @app.get("/test")
-async def get_image(current_user: UserInDB = Depends(Auhtentification.get_current_user)):
+async def get_image(
+    current_user: UserInDB = Depends(Auhtentification.get_current_user),
+):
     return {"api": "test"}
 
 
 @app.get("/video")
-async def get_image(current_user: UserInDB = Depends(Auhtentification.get_current_user)):
+async def get_image(
+    current_user: UserInDB = Depends(Auhtentification.get_current_user),
+):
     return await tasks.stream_image()
 
 
 @app.post("/set_parameter")
-async def api_set_parameter(param: ParameterUpdateModel, current_user: UserInDB = Depends(Auhtentification.get_current_user)):
+async def api_set_parameter(
+    param: ParameterUpdateModel,
+    current_user: UserInDB = Depends(Auhtentification.get_current_user),
+):
     new_parameter = await tasks.get_parameter()
     if param.parameter in new_parameter:
         data = new_parameter[param.parameter]
@@ -101,13 +103,17 @@ async def api_set_parameter(param: ParameterUpdateModel, current_user: UserInDB 
 
 
 @app.get("/parameter")
-async def get_parameter(current_user: UserInDB = Depends(Auhtentification.get_current_user)):
+async def get_parameter(
+    current_user: UserInDB = Depends(Auhtentification.get_current_user),
+):
     parameter = await tasks.get_parameter()
     return [parameter[param] for param in parameter]
 
 
 @app.get("/sensor-data")
-async def api_sensor_data(current_user: UserInDB = Depends(Auhtentification.get_current_user)):
+async def api_sensor_data(
+    current_user: UserInDB = Depends(Auhtentification.get_current_user),
+):
     return await tasks.sensor_data()
 
 
@@ -122,11 +128,17 @@ async def get_data(current_user: UserInDB = Depends(Auhtentification.get_current
 async def get_data(current_user: UserInDB = Depends(Auhtentification.get_current_user)):
     data = await tasks.get_data()
     data = data.json()
-    return StreamingResponse(ConverterFuncitons.generate_csv(data), media_type="text/csv", headers={"Content-Disposition": "attachment;filename=data.csv"})
 
+    return StreamingResponse(
+        ConverterFuncitons.generate_csv(data),
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment;filename=data.csv"},
+    )
 
+  
 @app.get("/video_download")
 async def download_video(current_user: UserInDB = Depends(Auhtentification.get_current_user)):
     video_buffer = Timelapse.download_video()
     return StreamingResponse(io.BytesIO(video_buffer), media_type="video/mp4",
                              headers={"Content-Disposition": "attachment;filename=output.mp4"})
+

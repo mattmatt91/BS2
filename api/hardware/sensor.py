@@ -1,12 +1,13 @@
 import bme680
 
+
 class Sensor:
     def __init__(self, sensor_type="BME", pin=2):
         try:
             self.sensor = bme680.BME680(0x77)
         except (RuntimeError, IOError):
             print("Failed to connect to BME680 sensor on address  0x77...")
-            
+
         self.sensor.set_humidity_oversample(bme680.OS_2X)
         self.sensor.set_pressure_oversample(bme680.OS_4X)
         self.sensor.set_temperature_oversample(bme680.OS_8X)
@@ -22,7 +23,4 @@ class Sensor:
             temperature = self.sensor.data.temperature
             humidity = self.sensor.data.humidity
             pressure = self.sensor.data.pressure
-        return {"humidity":humidity, "temperature":temperature, "pressure":pressure}
-
-
-
+        return {"humidity": humidity, "temperature": temperature, "pressure": pressure}

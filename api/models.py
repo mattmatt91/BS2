@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import Union, Optional, List
 
+
 class ParameterModel(BaseModel):
     parameter: str
     datatype: str
@@ -9,6 +10,7 @@ class ParameterModel(BaseModel):
     max_value: Optional[float] = None
     entrys: List[str] = []
 
+
 class ParameterUpdateModel(BaseModel):
     parameter: str
-    value: Union[float, bool, str] 
+    value: Union[float, bool, str]
