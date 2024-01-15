@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import './Monitor.css';
+import * as API from '../../service/api'
 
 interface SensorData {
   sensor: string;
@@ -14,16 +15,8 @@ const Monitor: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const token = localStorage.getItem('token'); // Retrieve the stored token
-      const apiUrl = process.env.REACT_APP_API_HOSTNAME;
-      const endpoint = `${apiUrl}/sensor-data`;
-
       try {
-        const response = await fetch(endpoint, {
-          headers: {
-            'Authorization': `Bearer ${token}` // Include the token in the request
-          }
-        });
+        const response = await API.getMonitor()
 
         if (!response.ok) {
           throw new Error('Network response was not ok');

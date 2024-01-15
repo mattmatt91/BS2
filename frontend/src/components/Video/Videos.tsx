@@ -1,23 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import './Video.css';
+import * as API from '../../service/api'
 
 const ImageComponent = () => {
   const [imageSrc, setImageSrc] = useState('');
-  const [isDownloading, setIsDownloading] = useState(false); 
+  const [isDownloading, setIsDownloading] = useState(false);
 
 
   useEffect(() => {
     const fetchImage = async () => {
-      const apiUrl = process.env.REACT_APP_API_HOSTNAME; // Read the environment variable
-      const endpoint = `${apiUrl}/video`; // Use a template string to create the endpoint
-      const token = localStorage.getItem('token'); // Retrieve the stored token
-
       try {
-        const response = await fetch(endpoint, {
-          headers: {
-            'Authorization': `Bearer ${token}` // Include the token in the request
-          }
-        });
+        const response = await API.getImage()
 
         if (response.ok) {
           const blob = await response.blob();

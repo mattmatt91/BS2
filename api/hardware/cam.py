@@ -17,8 +17,12 @@ class ImageCapturer:
     def capture(self):
         # Capture an image using picamera2
         self.camera = cv2.VideoCapture(0)
-        ret, frame = self.camera.read()
+        ret = None
+        frame = None
+        for i in range(10):
+            ret, frame = self.camera.read()
         self.camera.release()
+
         if not ret:
             raise Exception("Cam not found")
         if ret:
@@ -36,9 +40,6 @@ class ImageCapturer:
             print(f"unable to save image: {e}")
         return filename
 
-
-
-
     def format_for_serving(self, image):
         # Convert the image from BGR (OpenCV format) to RGB
         image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -49,7 +50,6 @@ class ImageCapturer:
         img.save(buf, format="PNG")
         buf.seek(0)
         return StreamingResponse(buf, media_type="image/png")
-
 
     def close(self):
         pass

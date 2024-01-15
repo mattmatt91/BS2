@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './Preferences.css';
+import * as API from '../../service/api'
 
 interface Parameter {
   parameter: string;
@@ -14,16 +15,9 @@ const ParameterComponent: React.FC = () => {
   const [parameters, setParameters] = useState<Parameter[]>([]);
 
   useEffect(() => {
-    const apiUrl = process.env.REACT_APP_API_HOSTNAME;
-    const endpoint = `${apiUrl}/parameter`;
     const fetchParameters = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const response = await fetch(endpoint, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
+        const response = await API.getPreferences()
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -105,8 +99,8 @@ const renderControl = (param: Parameter, handleChange: Function) => {
       );
     case 'String':
       return (
-        <select 
-          onChange={(e) => handleChange(param.parameter, e.target.value)} 
+        <select
+          onChange={(e) => handleChange(param.parameter, e.target.value)}
           value={param.value as string}
         >
           {param.entrys?.map((entry) => (

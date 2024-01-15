@@ -1,6 +1,7 @@
+import { Data as PlotData } from 'plotly.js';
 import React, { useEffect, useState } from 'react';
 import Plot from 'react-plotly.js';
-import { Data as PlotData } from 'plotly.js';
+import * as API from '../../service/api'
 
 interface SensorDataItem {
   sensor: string;
@@ -12,20 +13,15 @@ const Data: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const token = localStorage.getItem('token'); // Retrieve the stored token
-      const apiUrl = process.env.REACT_APP_API_HOSTNAME; // Read the environment variable
-      const endpoint = `${apiUrl}/data`; // Use a template string to create the endpoint
-
       try {
-        const response = await fetch(endpoint, {
-          headers: {
-            'Authorization': `Bearer ${token}` // Include the token in the request
-          }
-        });
-        
+        const response = await API.getData()
+
         if (!response.ok) {
+          localStorage.clear()
+          window.location.reload()
           throw new Error('Network response was not ok');
         }
+
         const data = await response.json();
         setSensorData(data);
       } catch (error) {
@@ -39,7 +35,7 @@ const Data: React.FC = () => {
   const organizeData = (): PlotData[] => {
     const timestamps = sensorData.filter(item => item.sensor === 'timestamp').map(item => item.Value);
     const sensorTypes = ['humidity', 'temperature', 'pressure',  'lamp_bloom', 'lamp_grow', 'fan'];
-    
+
     return sensorTypes.map(sensorType => {
       const sensorValues = sensorData.filter(item => item.sensor === sensorType).map(item => item.Value);
       return {

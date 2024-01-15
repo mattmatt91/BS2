@@ -17,11 +17,11 @@ const App: React.FC = () => {
     if(authToken == undefined){
       setAuthToken(localStorage.getItem(TOKEN_KEY))
     }
-  },[])
+  },[authToken])
 
   const handleLogin = (token: string) => {
     setAuthToken(token);
-    // Optionally, store the token in local storage or context for further requests
+    // Optionally, store the token in local storage or context for further requests tetete
   };
 
   const renderMainContent = () => {
