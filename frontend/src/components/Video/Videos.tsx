@@ -54,15 +54,14 @@ const ImageComponent = () => {
 
   return (
     <div className="image-container">
-      <h2>Image Component</h2>
-      {imageSrc ? <img src={imageSrc} alt="Loaded Image" /> : <p>Loading image...</p>}
-      <p>
+      <div className="image-wrapper">
+        {imageSrc ? <img src={imageSrc} alt="Loaded Image" /> : <p>Loading image...</p>}
         {isDownloading ? (
           <p>Loading...</p> // Replace with your loading animation or label
         ) : (
           <button onClick={handleDownloadVid}>Download Timelapse</button>
         )}
-      </p>
+      </div>
     </div>
   );
 };

@@ -1,14 +1,26 @@
 /* Video.css */
 
 .image-container {
-    width: 50%; /* Container takes full width of its parent */
-    text-align: center; /* Centers the image if it's smaller than the container width */
-    overflow: hidden; /* Ensures no overflow if image is larger than container */
+    width: 100%; /* Ensures the container takes up the full width */
+    padding-top: 60px; /* Adjust this value to match the height of your header */
+    position: relative; /* Position relative to allow absolute positioning inside */
 }
 
-.image-container img {
-    width: 100%; /* Image takes full width of its container */
-    height: auto; /* Maintains the aspect ratio of the image */
-    display: block; /* Removes default inline behavior of img */
-    margin: 0 auto; /* Centers the image horizontally */
+.image-wrapper {
+    width: 100%; /* Image wrapper takes full width of the container */
+    position: absolute; /* Positioned absolutely within container */
+    top: 0; /* Aligns top of the image wrapper with the top of the container */
+}
+
+.image-wrapper img {
+    width: 100%; /* Image takes full width of the wrapper */
+    height: auto; /* Maintains aspect ratio */
+    padding-top: 20;
+    top: 10; /* Aligns top of the image wrapper with the top of the container */
+}
+.image-wrapper button {
+    width: 100%; /* Image takes full width of the wrapper */
+    height: auto; /* Maintains aspect ratio */
+    padding-top: 10;
+    padding-bottom: 100;
 }
