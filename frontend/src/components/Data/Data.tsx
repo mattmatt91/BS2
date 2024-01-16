@@ -2,6 +2,7 @@ import { Data as PlotData } from 'plotly.js';
 import React, { useEffect, useState } from 'react';
 import Plot from 'react-plotly.js';
 import * as API from '../../service/api'
+import './Data.css';
 
 interface SensorDataItem {
   sensor: string;
@@ -72,14 +73,16 @@ const Data: React.FC = () => {
   const layout = { title: 'Sensor Data Plot' };
 
   return (
-    <div>
-      <h2>Sensor Data Plot</h2>
-      <Plot data={plotData} layout={layout} />
+    <div className="data-container">
+      <div className="plot-container">
+        <Plot data={plotData} layout={layout} />
+      </div>
       <p>
         <button onClick={handleDownloadCsv}>Download CSV</button>
       </p>
     </div>
   );
+
 };
 
 export default Data;

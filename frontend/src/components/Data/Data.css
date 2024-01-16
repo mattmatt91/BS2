@@ -1,0 +1,15 @@
+/* Data.css */
+
+.data-container {
+    width: 100%; /* Full width of the container */
+    padding: 20px; /* Padding around the content */
+}
+
+.plot-container {
+    width: 100%; /* Full width for the plot */
+    height: auto; /* Automatic height based on the content */
+}
+
+.react-plotly.js-plotly-plot {
+    width: 100% !important; /* Override Plotly's default width */
+}
