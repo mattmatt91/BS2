@@ -135,10 +135,17 @@ async def get_data(current_user: UserInDB = Depends(Auhtentification.get_current
         headers={"Content-Disposition": "attachment;filename=data.csv"},
     )
 
-  
-@app.get("/video_download")
-async def download_video(current_user: UserInDB = Depends(Auhtentification.get_current_user)):
-    video_buffer = Timelapse.download_video()
-    return StreamingResponse(io.BytesIO(video_buffer), media_type="video/mp4",
-                             headers={"Content-Disposition": "attachment;filename=output.mp4"})
 
+@app.get("/video_download")
+async def download_video(
+    current_user: UserInDB = Depends(Auhtentification.get_current_user),
+):
+    video_buffer = Timelapse.download_video()
+    return StreamingResponse(
+        io.BytesIO(video_buffer),
+        media_type="video/mp4",
+        headers={"Content-Disposition": "attachment;filename=output.mp4"},
+    )
+
+
+# SOME TEST FOR GIT

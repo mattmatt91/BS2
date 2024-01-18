@@ -5,3 +5,4 @@ data/sensor_data
 data/images
 */venv
 */credentials.json
+*.mp4

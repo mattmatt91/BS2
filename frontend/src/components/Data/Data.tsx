@@ -1,7 +1,8 @@
-import { Data as PlotData } from 'plotly.js';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useLayoutEffect, useRef } from 'react';
 import Plot from 'react-plotly.js';
-import * as API from '../../service/api'
+import * as API from '../../service/api';
+import './Data.css';
+import { Data as PlotlyData, Layout as PlotlyLayout } from 'plotly.js';
 
 interface SensorDataItem {
   sensor: string;
@@ -10,15 +11,30 @@ interface SensorDataItem {
 
 const Data: React.FC = () => {
   const [sensorData, setSensorData] = useState<SensorDataItem[]>([]);
+  const [plotWidth, setPlotWidth] = useState<number>(0);
+  const plotContainerRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    const updatePlotSize = () => {
+      if (plotContainerRef.current) {
+        setPlotWidth(plotContainerRef.current.offsetWidth);
+      }
+    };
+
+    window.addEventListener('resize', updatePlotSize);
+    updatePlotSize();
+
+    return () => window.removeEventListener('resize', updatePlotSize);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await API.getData()
+        const response = await API.getData();
 
         if (!response.ok) {
-          localStorage.clear()
-          window.location.reload()
+          localStorage.clear();
+          window.location.reload();
           throw new Error('Network response was not ok');
         }
 
@@ -32,9 +48,9 @@ const Data: React.FC = () => {
     fetchData();
   }, []);
 
-  const organizeData = (): PlotData[] => {
+  const organizeData = (): PlotlyData[] => {
     const timestamps = sensorData.filter(item => item.sensor === 'timestamp').map(item => item.Value);
-    const sensorTypes = ['humidity', 'temperature', 'pressure',  'lamp_bloom', 'lamp_grow', 'fan'];
+    const sensorTypes = ['humidity', 'temperature', 'pressure', 'lamp_bloom', 'lamp_grow', 'fan'];
 
     return sensorTypes.map(sensorType => {
       const sensorValues = sensorData.filter(item => item.sensor === sensorType).map(item => item.Value);
@@ -68,13 +84,26 @@ const Data: React.FC = () => {
     }).catch(error => console.error('Error downloading CSV:', error));
   };
 
-  const plotData = organizeData(); // Use the organized data for plotting
-  const layout = { title: 'Sensor Data Plot' };
+  const plotData = organizeData();
+  const layout: Partial<PlotlyLayout> = {
+    autosize: false,
+    width: plotWidth,
+    height: 400,
+    legend: {
+      orientation: 'h',
+      x: 0,
+      y: 10, // Adjust the vertical position of the legend
+      xanchor: 'left',
+      yanchor: 'bottom'
+    },
+    // ... [any other layout properties you need]
+  };
 
   return (
-    <div>
-      <h2>Sensor Data Plot</h2>
-      <Plot data={plotData} layout={layout} />
+    <div className="data-container">
+      <div className="plot-container" ref={plotContainerRef}>
+        <Plot data={plotData} layout={layout} />
+      </div>
       <p>
         <button onClick={handleDownloadCsv}>Download CSV</button>
       </p>
