@@ -42,7 +42,6 @@ const Monitor: React.FC = () => {
 
   return (
     <div className="monitor">
-      <h2>Sensor Data</h2>
       {error && <div>Error: {error}</div>}
       <table>
         <thead>
