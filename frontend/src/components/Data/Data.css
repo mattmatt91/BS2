@@ -1,15 +1,17 @@
-/* Data.css */
-
 .data-container {
+    align-items: center;
     width: 100%; /* Full width of the container */
-    padding: 20px; /* Padding around the content */
-}
+    /* Padding around the content */
+  }
 
-.plot-container {
+  .plot-container {
     width: 100%; /* Full width for the plot */
     height: auto; /* Automatic height based on the content */
-}
+  }
 
-.react-plotly.js-plotly-plot {
-    width: 100% !important; /* Override Plotly's default width */
-}
+  .data-container button {
+    width: 100%; /* Button takes full width of the container */
+    ; /* Maintains aspect ratio */
+    padding-top: 10px; /* Padding at the top of the button */
+    padding-bottom: 10px; /* Padding at the bottom of the button */
+  }

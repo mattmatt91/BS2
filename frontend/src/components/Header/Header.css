@@ -1,6 +1,19 @@
 .header {
   display: flex;
+  align-items: center;
   height: 10%;
+}
+
+.logo {
+  height: 100%;
+  width: auto;
+  border-radius: 50%; /* Make the image round */
+  object-fit: cover; /* Ensure the image covers the area */
+}
+
+.buttons-container {
+  display: flex;
+  flex: 1;
 }
 
 .button {

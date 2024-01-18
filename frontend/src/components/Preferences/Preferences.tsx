@@ -64,7 +64,6 @@ const ParameterComponent: React.FC = () => {
 
   return (
     <div className="preferences-container">
-      <h2>Parameter Controls</h2>
       {parameters.map((param) => (
         <div className="preference-row" key={param.parameter}>
           <label className="preference-label">{param.parameter}:</label>

@@ -1,4 +1,3 @@
-// src/Header.tsx
 import React from 'react';
 import './Header.css';
 
@@ -12,15 +11,18 @@ const Header: React.FC<HeaderProps> = ({ activeButton, onButtonClick }) => {
 
   return (
     <div className="header">
-      {buttonLabels.map((label, index) => (
-        <button
-          key={index}
-          className={`button ${activeButton === index ? 'active' : ''}`}
-          onClick={() => onButtonClick(index)}
-        >
-          {label}
-        </button>
-      ))}
+      <img src="/logo.png" alt="Logo" className="logo" />
+      <div className="buttons-container">
+        {buttonLabels.map((label, index) => (
+          <button
+            key={index}
+            className={`button ${activeButton === index ? 'active' : ''}`}
+            onClick={() => onButtonClick(index)}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
     </div>
   );
 };
