@@ -40,7 +40,6 @@ app.add_middleware(
 # @app.get("/startup")
 @app.on_event("startup")
 async def start_tasks():
-    print("startup...")
     for param_name, param_values in param_config.items():
         await tasks.set_parameter(ParameterModel(**param_values), init=True)
 

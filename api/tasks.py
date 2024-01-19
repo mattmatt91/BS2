@@ -16,7 +16,6 @@ pin_assignment_sensors = config["pin_assignment_sensors"]
 
 class Tasks:
     def __init__(self) -> None:
-        print("init task instance")
         self.scheduler = AsyncIOScheduler()
         self.sensor = Sensor(pin=pin_assignment_sensors["DHT"])
         self.relais = Relais(pin_assignment_relais)
@@ -77,15 +76,14 @@ class Tasks:
             await self.update_light(param.value)
 
     async def update_light(self, lamp):
-        print(lamp)
         if lamp == "bloom":
             hour_off = 12
         else:
             hour_off = 18
-        print(f"from update light: seconds{hour_off}, lamp = {lamp}")
+        print(f"from update light: seconds = {hour_off}, lamp = {lamp}")
         job = self.scheduler.get_job("lamp_off")
         if job:
-            job.reschedule(trigger=CronTrigger(second=hour_off))
+            job.reschedule(trigger=CronTrigger(hour=hour_off))
 
         # logic for lamp toggling
         time_now = datetime.now().hour
@@ -96,19 +94,16 @@ class Tasks:
 
     async def measure_data(self):
         data = await self.sensor_data()
-        print("measure data")
-        print(data)
         sensor_data = ConverterFuncitons.convert_to_sensor_data(data)
-        print(sensor_data)
         requests.post(f"{DATABASE_URL}/add_sensor_data", json=sensor_data)
 
     async def toggle_lamp_on(self):
         param = await self.get_parameter()
         lamp_on = "lamp_bloom" if param["Light"]["value"] == "bloom" else "lamp_grow"
         lamp_off = "lamp_grow" if param["Light"]["value"] == "bloom" else "lamp_bloom"
-        print(f"toggling lamp on at {lamp_on}")
         self.relais.operate_relais({lamp_on: True})
         self.relais.operate_relais({lamp_off: False})
+        print(f"toggling lamp on: {lamp_on}")
 
     async def toggle_lamp_off(self):
         print("toggling light off")
