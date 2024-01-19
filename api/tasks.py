@@ -84,11 +84,15 @@ class Tasks:
             hour_off = 18
         print(f"from update light: seconds{hour_off}, lamp = {lamp}")
         job = self.scheduler.get_job("lamp_off")
-
-        # logic for lamp toggling
-
         if job:
             job.reschedule(trigger=CronTrigger(second=hour_off))
+
+        # logic for lamp toggling
+        time_now = datetime.now().hour
+        if time_now >= hour_off:
+            await self.toggle_lamp_off()
+        if time_now < hour_off:
+            await self.toggle_lamp_on()
 
     async def measure_data(self):
         data = await self.sensor_data()
@@ -100,9 +104,11 @@ class Tasks:
 
     async def toggle_lamp_on(self):
         param = await self.get_parameter()
-        lamp = "lamp_bloom" if param["Light"]["value"] == "bloom" else "lamp_grow"
-        print(f"toggling lamp on at {lamp}")
-        self.relais.operate_relais({lamp: True})
+        lamp_on = "lamp_bloom" if param["Light"]["value"] == "bloom" else "lamp_grow"
+        lamp_off = "lamp_grow" if param["Light"]["value"] == "bloom" else "lamp_bloom"
+        print(f"toggling lamp on at {lamp_on}")
+        self.relais.operate_relais({lamp_on: True})
+        self.relais.operate_relais({lamp_off: False})
 
     async def toggle_lamp_off(self):
         print("toggling light off")
