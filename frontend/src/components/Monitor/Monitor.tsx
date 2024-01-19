@@ -1,5 +1,3 @@
-// src/components/Monitor/Monitor.tsx
-
 import React, { useEffect, useState } from 'react';
 import './Monitor.css';
 import * as API from '../../service/api'
@@ -23,6 +21,7 @@ const Monitor: React.FC = () => {
         }
 
         const data = await response.json();
+        console.log(data)
         setSensorData(data);
         setError(null);
       } catch (error) {
@@ -36,8 +35,21 @@ const Monitor: React.FC = () => {
     return () => clearInterval(intervalId);
   }, []);
 
+  const isTrueValue = (value: any) => {
+    return value === true || value === 1 || value === '1';
+  };
+
+  const isFalseValue = (value: any) => {
+    return value === false || value === 0 || value === '0';
+  };
+
   const displayValue = (value: any) => {
-    return typeof value === 'boolean' ? (value ? 'on' : 'off') : value;
+    if (isTrueValue(value)) {
+      return <span className="value-true">On</span>;
+    } else if (isFalseValue(value)) {
+      return <span className="value-false">Off</span>;
+    }
+    return value;
   };
 
   return (

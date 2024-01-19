@@ -37,7 +37,7 @@
     },
     "schedule_intervals": {
         "measure_data": 10,
-        "capture_img": 30
+        "capture_img": 120
     },
     "pin_assignment_relais": {
         "lamp_grow": {"pin_o": 5, "pin_i":12},
@@ -47,4 +47,3 @@
     },
     "pin_assignment_sensors": {"DHT":2}
 }
-
