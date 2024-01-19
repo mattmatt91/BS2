@@ -23,7 +23,6 @@ class Relais:
         for operation in relais_operations:
             state = relais_operations[operation]
             if operation in self.relais:
-                print(self.relais[operation]["pin_o"])
                 GPIO.output(
                     self.relais[operation]["pin_o"], GPIO.LOW if state else GPIO.HIGH
                 )
