@@ -2,6 +2,8 @@ from fastapi import FastAPI, Depends, HTTPException
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
+from fastapi.responses import FileResponse
+
 from converter_functions import ConverterFuncitons
 from models import ParameterModel, ParameterUpdateModel
 from tasks import Tasks
@@ -139,12 +141,9 @@ async def get_data(current_user: UserInDB = Depends(Auhtentification.get_current
 async def download_video(
     current_user: UserInDB = Depends(Auhtentification.get_current_user),
 ):
-    video_buffer = Timelapse.download_video()
-    return StreamingResponse(
-        io.BytesIO(video_buffer),
-        media_type="video/mp4",
-        headers={"Content-Disposition": "attachment;filename=output.mp4"},
-    )
+    video_path = "timelapse_video.mp4"  # Specify the video file path
+    video_file_path = Timelapse.download_video(video_path)
+    return FileResponse(video_file_path, media_type="video/mp4", filename=video_path)
 
 
 # SOME TEST FOR GIT
