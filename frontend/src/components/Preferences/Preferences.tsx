@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './Preferences.css';
-import * as API from '../../service/api'
+import * as API from '../../service/api';
+import { debounce } from 'lodash';
 
 interface Parameter {
   parameter: string;
@@ -13,6 +14,7 @@ interface Parameter {
 
 const ParameterComponent: React.FC = () => {
   const [parameters, setParameters] = useState<Parameter[]>([]);
+  const [currentValues, setCurrentValues] = useState<{ [key: string]: boolean | number | string }>({});
 
   useEffect(() => {
     const fetchParameters = async () => {
@@ -23,6 +25,10 @@ const ParameterComponent: React.FC = () => {
         }
         const data = await response.json();
         setParameters(data);
+        setCurrentValues(data.reduce((acc: any, param: Parameter) => {
+          acc[param.parameter] = param.value;
+          return acc;
+        }, {}));
       } catch (error) {
         console.error('Error:', error);
       }
@@ -62,13 +68,20 @@ const ParameterComponent: React.FC = () => {
     }
   };
 
+  const debouncedHandleChange = debounce(handleChange, 500);
+
+  const handleInputChange = (paramName: string, newValue: boolean | number | string) => {
+    setCurrentValues({ ...currentValues, [paramName]: newValue });
+    debouncedHandleChange(paramName, newValue);
+  };
+
   return (
     <div className="preferences-container">
       {parameters.map((param) => (
         <div className="preference-row" key={param.parameter}>
           <label className="preference-label">{param.parameter}:</label>
           <div className="preference-control">
-            {renderControl(param, handleChange)}
+            {renderControl(param, handleInputChange, currentValues[param.parameter])}
           </div>
         </div>
       ))}
@@ -76,31 +89,33 @@ const ParameterComponent: React.FC = () => {
   );
 };
 
-
-const renderControl = (param: Parameter, handleChange: Function) => {
+const renderControl = (param: Parameter, handleInputChange: Function, currentValue: boolean | number | string) => {
   switch (param.datatype) {
     case 'Bool':
       return (
-        <button onClick={() => handleChange(param.parameter, !param.value)}>
-          {param.value.toString()}
+        <button onClick={() => handleInputChange(param.parameter, !param.value)}>
+          {currentValue.toString()}
         </button>
       );
     case 'Float':
     case 'Int':
       return (
-        <input
-          type="range"
-          min={param.min_value}
-          max={param.max_value}
-          value={param.value as number}
-          onChange={(e) => handleChange(param.parameter, parseFloat(e.target.value))}
-        />
+        <>
+          <input
+            type="range"
+            min={param.min_value}
+            max={param.max_value}
+            value={currentValue as number}
+            onChange={(e) => handleInputChange(param.parameter, parseFloat(e.target.value))}
+          />
+          <span>{currentValue}</span>
+        </>
       );
     case 'String':
       return (
         <select
-          onChange={(e) => handleChange(param.parameter, e.target.value)}
-          value={param.value as string}
+          onChange={(e) => handleInputChange(param.parameter, e.target.value)}
+          value={currentValue as string}
         >
           {param.entrys?.map((entry) => (
             <option key={entry} value={entry}>{entry}</option>
