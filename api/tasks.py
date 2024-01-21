@@ -1,10 +1,11 @@
 import requests
 from models import ParameterModel, ParameterUpdateModel
-from hardware import Sensor, Relais, Cam, config
-from datetime import datetime
+from hardware import Sensor, Relais, Cam, SensorWater, config
+from datetime import datetime, timedelta
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 from apscheduler.triggers.cron import CronTrigger
+from apscheduler.triggers.date import DateTrigger
 from converter_functions import ConverterFuncitons
 from datetime import datetime
 
@@ -20,22 +21,36 @@ class Tasks:
         self.sensor = Sensor(pin=pin_assignment_sensors["DHT"])
         self.relais = Relais(pin_assignment_relais)
         self.cam = Cam()
+        self.sensorwater = SensorWater()
 
     async def start_scheduler(self):
         await self.init_lamp()
+
+        # measure data
         self.scheduler.add_job(
             self.measure_data,
             trigger=IntervalTrigger(minutes=schedule_intervals["measure_data"]),
         )
+
+        # update water
+        self.scheduler.add_job(
+            self.update_water,
+            trigger=IntervalTrigger(minutes=schedule_intervals["update_water"]),
+        )
+
+        # image
         self.scheduler.add_job(
             self.store_image,
             trigger=IntervalTrigger(minutes=schedule_intervals["capture_img"]),
         )
+
+        # lamp stuff
         parameter = await self.get_parameter()
         bloom_hour = 12 if parameter["Light"]["value"] == "bloom" else 18
         self.scheduler.add_job(
             self.toggle_lamp_on, trigger=CronTrigger(hour=0), id="lamp_on"
         )
+
         self.scheduler.add_job(
             self.toggle_lamp_off, trigger=CronTrigger(hour=bloom_hour), id="lamp_off"
         )
@@ -58,11 +73,12 @@ class Tasks:
         sensor_data = [{"sensor": "timestamp", "Value": current_time}]
         sensor_data += [{"sensor": k, "Value": v} for k, v in data.items()]
         relais_states = self.relais.get_states()
+        water_data = self.sensorwater.measure_data()
+        sensor_data += [{"sensor": k, "Value": v} for k, v in water_data.items()]
         sensor_data += [
             {"sensor": k, "Value": 1 if v else 0 if isinstance(v, bool) else v}
             for k, v in relais_states.items()
         ]
-        # print(sensor_data)
         return sensor_data
 
     async def set_parameter(self, param: ParameterModel, init=False):
@@ -125,3 +141,32 @@ class Tasks:
     async def stream_image(self):
         img = self.cam.capture()
         return self.cam.format_for_serving(img)
+
+    async def update_water(
+        self,
+    ):
+        sensordata = ConverterFuncitons.convert_to_sensor_data(await self.sensor_data())
+        cmd = {}
+        # chekc pH
+        parameter = await self.get_parameter()
+        if sensordata["pH"] < float(parameter["pH"]["min_value"]):
+            cmd["pump_ph_up"] = config["watersystem_pump_durations"]["pH_down"]
+        elif sensordata["pH"] >= float(parameter["pH"]["max_value"]):
+            cmd["pump_ph_down"] = config["watersystem_pump_durations"]["pH_up"]
+
+        # chek ec
+        if sensordata["ec"] < float(parameter["ec"]["min_value"]):
+            cmd["pump_fertiliser"] = config["watersystem_pump_durations"]["ec"]
+
+        await self.toggle_pump(cmd)
+
+    async def toggle_pump(self, cmd: dict):
+        for pump in cmd:
+            self.relais.operate_relais({pump: True})
+            # Calculate the future run time
+            run_time = datetime.now() + timedelta(seconds=cmd[pump])
+            self.scheduler.add_job(
+                self.relais.operate_relais,
+                DateTrigger(run_date=run_time),
+                args=[{pump: False}],
+            )

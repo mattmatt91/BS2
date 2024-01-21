@@ -16,6 +16,20 @@
                 "grow"
             ]
         },
+        "pH": {
+            "parameter": "pH",
+            "datatype": "Float",
+            "value": 6.5,
+            "min_value": 5.5,
+            "max_value": 7.5
+        },
+        "ec": {
+            "parameter": "ec",
+            "datatype": "Float",
+            "value": 750,
+            "min_value": 500,
+            "max_value": 1000
+        },
         "Mode": {
             "parameter": "Mode",
             "datatype": "String",
@@ -37,13 +51,19 @@
     },
     "schedule_intervals": {
         "measure_data": 10,
-        "capture_img": 120
+        "capture_img": 120,
+        "update_water": 30
     },
     "pin_assignment_relais": {
         "lamp_grow": {"pin_o": 5, "pin_i":12},
         "lamp_bloom": {"pin_o": 6, "pin_i":16},
         "fan": {"pin_o": 19, "pin_i":21},
-        "pump": {"pin_o": 13, "pin_i":20}
+        "pump": {"pin_o": 13, "pin_i":20},
+
+        "pump_ph_up": {"pin_o": 8, "pin_i":11},
+        "pump_ph_down": {"pin_o": 9, "pin_i":14},
+        "pump_fertiliser": {"pin_o": 10, "pin_i":15}
     },
-    "pin_assignment_sensors": {"DHT":2}
+    "pin_assignment_sensors": {"DHT":2},
+    "watersystem_pump_durations": {"ec":5, "pH_up":5, "pH_down":5}
 }

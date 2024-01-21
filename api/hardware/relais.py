@@ -21,6 +21,7 @@ class Relais:
 
     def operate_relais(self, relais_operations):
         for operation in relais_operations:
+
             state = relais_operations[operation]
             if operation in self.relais:
                 GPIO.output(

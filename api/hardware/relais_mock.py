@@ -9,6 +9,7 @@ class MockRelais:
     def operate_relais(self, relais_operations):
         # relais_operations is a list of dicts, each dict contains relais name and a Boolean
         for operation in relais_operations:
+            print(operation, relais_operations[operation])
             state = relais_operations[operation]
             if operation in self.relais:
                 self.relais_states[operation] = state

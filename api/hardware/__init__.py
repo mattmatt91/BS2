@@ -24,13 +24,11 @@ if operating_mode == "mock":
     from .sensor_mock import MockSensor as Sensor
     from .relais_mock import MockRelais as Relais
     from .cam_mock import MockImageCapturer as Cam
+    from .sensorwater_mock import MockSensorWater as SensorWater
 elif operating_mode == "raspi":
-    # from .sensor_mock import MockSensor as Sensor
-    # from .relais_mock import MockRelais as Relais
-    # from .cam_mock import MockImageCapturer as Cam
-    # Import real sensor classes
     from .sensor import Sensor as Sensor
     from .relais import Relais as Relais
     from .cam import ImageCapturer as Cam
+    from .sensorwater_mock import MockSensorWater as SensorWater
 else:
     raise Exception("operating system must be mock or raspi")

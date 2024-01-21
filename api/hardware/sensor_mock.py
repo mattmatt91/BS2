@@ -18,7 +18,7 @@ class MockSensor:
         pressure = round(
             random.uniform(15, 30), 3
         )  # Random temperature in degrees Celsius
-        return {"humidity": humidity, "temperature": temperature, "presssure": pressure}
+        return {"humidity": humidity, "temperature": temperature, "pressure": pressure}
 
 
 # Example usage
