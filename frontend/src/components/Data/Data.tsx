@@ -105,7 +105,7 @@ const Data: React.FC = () => {
         <Plot data={plotData} layout={layout} />
       </div>
       <p>
-        <button onClick={handleDownloadCsv}>Download CSV</button>
+        <button className="button" onClick={handleDownloadCsv}>Download CSV</button>
       </p>
     </div>
   );

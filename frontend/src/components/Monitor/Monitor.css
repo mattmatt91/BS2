@@ -5,6 +5,7 @@
 table {
   border-collapse: collapse;
   width: 100%;
+  table-layout: fixed; /* Ensures fixed column widths */
 }
 
 table, th, td {
@@ -14,6 +15,7 @@ table, th, td {
 th, td {
   padding: 8px;
   text-align: left;
+  width: 50%; /* Set each column to take 50% of the table width */
 }
 
 th {

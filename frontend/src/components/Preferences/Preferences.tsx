@@ -94,7 +94,7 @@ const renderControl = (param: Parameter, handleInputChange: Function, currentVal
   switch (param.datatype) {
     case 'Bool':
       return (
-        <button onClick={() => handleInputChange(param.parameter, !param.value)}>
+        <button className='button' onClick={() => handleInputChange(param.parameter, !param.value)}>
           {currentValue.toString()}
         </button>
       );

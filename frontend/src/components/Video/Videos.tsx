@@ -59,7 +59,7 @@ const ImageComponent = () => {
         {isDownloading ? (
           <p>Loading...</p> // Replace with your loading animation or label
         ) : (
-          <button onClick={handleDownloadVid}>Download Timelapse</button>
+          <button className="button" onClick={handleDownloadVid}>Download Timelapse</button>
         )}
       </div>
     </div>

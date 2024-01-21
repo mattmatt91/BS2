@@ -18,9 +18,3 @@
     padding-top: 20;
     top: 10; /* Aligns top of the image wrapper with the top of the container */
 }
-.image-wrapper button {
-    width: 100%; /* Image takes full width of the wrapper */
-    height: auto; /* Maintains aspect ratio */
-    padding-top: 10;
-    padding-bottom: 100;
-}

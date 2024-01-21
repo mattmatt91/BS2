@@ -56,21 +56,21 @@ const Monitor: React.FC = () => {
     <div className="monitor">
       {error && <div>Error: {error}</div>}
       <table>
-        <thead>
-          <tr>
-            <th>Sensor</th>
-            <th>Value</th>
-          </tr>
-        </thead>
-        <tbody>
-          {sensorData.map((entry, index) => (
+    <thead>
+      <tr>
+        <th>Sensor</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody>
+    {sensorData.map((entry, index) => (
             <tr key={index}>
               <td>{entry.sensor}</td>
               <td>{displayValue(entry.Value)}</td>
             </tr>
           ))}
-        </tbody>
-      </table>
+    </tbody>
+  </table>
     </div>
   );
 };

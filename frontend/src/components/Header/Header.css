@@ -16,7 +16,7 @@
   flex: 1;
 }
 
-.button {
+.header button {
   flex: 1;
   background-color: #4c956d;
   color: white;
@@ -24,6 +24,6 @@
   cursor: pointer;
 }
 
-.active {
-  background-color: #468b61;
+.header .buttons-container .button.active {
+  background-color: #468b61; /* Example active style */
 }
