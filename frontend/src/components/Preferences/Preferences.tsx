@@ -27,7 +27,11 @@ const ParameterComponent: React.FC = () => {
         const data = await response.json();
         setParameters(data);
         setCurrentValues(data.reduce((acc: any, param: Parameter) => {
-          acc[param.parameter] = param.value;
+          if (param.datatype === 'Bool') {
+            acc[param.parameter] = param.datatype === 'Bool' ? param.value === '1' : param.value;
+          } else {
+            acc[param.parameter] = param.value;
+          }
           return acc;
         }, {}));
       } catch (error) {

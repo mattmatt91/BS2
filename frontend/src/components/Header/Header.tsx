@@ -7,7 +7,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ activeButton, onButtonClick }) => {
-  const buttonLabels = ["Monitor", "Data", "Preferences", "Video"];
+  const buttonLabels = ["Monitor", "Data", "Preferences", "Video", "Errors"];
 
   return (
     <div className="header">

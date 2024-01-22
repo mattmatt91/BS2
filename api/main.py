@@ -15,6 +15,7 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from authentification import Auhtentification, UserInDB
 import os
 import io
+from warningmanager import WarningManager
 
 # Configuration
 param_config = config["param_config"]
@@ -27,6 +28,7 @@ with open("credentials.json", "r") as file:
 
 app = FastAPI()
 tasks = Tasks()
+warning_manager = WarningManager()
 
 
 # Middleware (CORS)
@@ -146,4 +148,14 @@ async def download_video(
     return FileResponse(video_file_path, media_type="video/mp4", filename=video_path)
 
 
-# SOME TEST FOR GIT
+@app.get("/warnings")
+async def get_data(current_user: UserInDB = Depends(Auhtentification.get_current_user)):
+    warning_list = warning_manager.get_warnings()
+    warning_list = [warning_list[i] for i in warning_list]
+    return warning_list
+
+
+@app.delete("/warnings/{warning_id}")
+async def delete_warning(warning_id: int):
+    warning_manager.delete_warning(warning_id)
+    return {"message": "Warning deleted successfully"}

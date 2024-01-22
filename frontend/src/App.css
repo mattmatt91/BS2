@@ -20,7 +20,7 @@
   flex-grow: 1;
   background-color: #f0f0f0;
   padding: 20px;
-  font-size: 20px; /* Standard font size for main content */
+  font-size: 18px; /* Standard font size for main content */
 }
 
 .button {
@@ -62,11 +62,12 @@ input[type='range']::-moz-range-thumb {
 }
 
 select {
+  font-family: 'Courier New', sans-serif; /* Specify a default font family for the app */
   width: 100%; /* Full-width */
   padding: 8px 12px; /* Padding */
   border: 1px solid #ccc; /* Border */
   border-radius: 4px; /* Rounded corners */
-  background-color: white; /* Background color */
+  background-color: #6ab178;
   color: #333; /* Text color */
   -webkit-appearance: none; /* Remove default styles for WebKit browsers */
   -moz-appearance: none; /* Remove default styles for Mozilla browsers */

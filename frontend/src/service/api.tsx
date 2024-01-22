@@ -36,6 +36,29 @@ export function getPreferences(){
   });
 }
 
+export function getWarnings(){
+  const token = localStorage.getItem('token'); // Retrieve the stored token
+  const apiUrl = process.env.REACT_APP_API_HOSTNAME; // Read the environment variable
+  const endpoint = `${apiUrl}/warnings`; // Use a template string to create the endpoint
+  return fetch(endpoint, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+}
+
+export function deleteWarning(warningId: number) {
+  const token = localStorage.getItem('token');
+  const apiUrl = process.env.REACT_APP_API_HOSTNAME;
+  const endpoint = `${apiUrl}/warnings/${warningId}`;
+  return fetch(endpoint, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+}
+
 export function getImage(){
   const token = localStorage.getItem('token');
   const apiUrl = process.env.REACT_APP_API_HOSTNAME; // Read the environment variable
