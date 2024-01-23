@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import datetime
 
 
 class Database:
@@ -34,7 +35,18 @@ class Database:
                               entrys TEXT)"""
         )
         self.conn.commit()
+        self.conn.execute(
+            """CREATE TABLE IF NOT EXISTS warnings
+               (id INTEGER PRIMARY KEY AUTOINCREMENT,
+                message TEXT,
+                type TEXT,
+                isRead BOOLEAN,
+                timestamp TIMESTAMP)
+            """
+        )
+        self.conn.commit()
 
+    # sensordata stuff
     def add_data(self, sensor_data):
         self.conn.execute(
             "INSERT INTO measuring_data (timestamp, humidity, temperature, pressure, lamp_bloom, lamp_grow, fan, pH, ec, temp_water) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
@@ -53,6 +65,13 @@ class Database:
         )
         self.conn.commit()
 
+    def get_measuring_data(self):
+        cursor = self.conn.execute("SELECT * FROM measuring_data")
+        rows = cursor.fetchall()
+        columns = [column[0] for column in cursor.description]
+        return [dict(zip(columns, row)) for row in rows]
+
+    # parameter stuff
     def add_parameter(self, parameter_data, init=False):
         parameter_name = parameter_data.parameter
         cursor = self.conn.execute(
@@ -92,12 +111,6 @@ class Database:
 
         self.conn.commit()
 
-    def get_measuring_data(self):
-        cursor = self.conn.execute("SELECT * FROM measuring_data")
-        rows = cursor.fetchall()
-        columns = [column[0] for column in cursor.description]
-        return [dict(zip(columns, row)) for row in rows]
-
     def get_parameter(self):
         cursor = self.conn.execute("SELECT * FROM parameters")
         rows = cursor.fetchall()
@@ -109,6 +122,32 @@ class Database:
             param_dict["entrys"] = entrys_str.split(",") if entrys_str else []
             parameters.append(param_dict)
         return parameters
+
+    # warning stuff
+    def add_warning(self, warning):
+        warning["timestamp"] = datetime.now().strftime("%d.%m.%Y %H:%M:%S")
+        warning["isRead"] = False
+        print(f"form warnings: {warning}")
+        self.conn.execute(
+            "INSERT INTO warnings (message, type, isRead, timestamp) VALUES (?, ?, ?, ?)",
+            (
+                warning["message"],
+                warning["type"],
+                warning["isRead"],
+                warning["timestamp"],
+            ),
+        )
+        self.conn.commit()
+
+    def delete_warning(self, warning_id):
+        self.conn.execute("DELETE FROM warnings WHERE id = ?", (warning_id,))
+        self.conn.commit()
+
+    def get_warnings(self):
+        cursor = self.conn.execute("SELECT * FROM warnings")
+        rows = cursor.fetchall()
+        columns = [column[0] for column in cursor.description]
+        return [dict(zip(columns, row)) for row in rows]
 
     def close(self):
         self.conn.close()

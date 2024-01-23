@@ -25,3 +25,8 @@ class ParameterData(BaseModel):
     min_value: Optional[float] = None
     max_value: Optional[float] = None
     entrys: List[str] = []
+
+
+class WarningDatabase(BaseModel):
+    message: str
+    type: str

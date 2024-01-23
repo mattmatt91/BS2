@@ -6,7 +6,7 @@ import * as API from '../../service/api';
 interface Warning {
   id: number;
   message: string;
-  type: 'system' | 'hardware';
+  type: 'system' | 'hardware'| 'sensordata';
   isRead: boolean;
   timestamp: string;
 }
@@ -16,7 +16,7 @@ const WarningsMonitor: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchWarnings = async () => {
       try {
         const response = await API.getWarnings();
 
@@ -25,6 +25,7 @@ const WarningsMonitor: React.FC = () => {
         }
 
         const data: Warning[] = await response.json();
+        console.log(data)
         setWarnings(data);
         setError(null);
       } catch (error) {
@@ -33,7 +34,7 @@ const WarningsMonitor: React.FC = () => {
       }
     };
 
-    fetchData();
+    fetchWarnings();
   }, []);
 
   const handleDelete = async (warningId: number) => {
@@ -49,7 +50,16 @@ const WarningsMonitor: React.FC = () => {
   };
 
   const getWarningClass = (type: string) => {
-    return type === 'system' ? 'warning-system' : 'warning-hardware';
+    switch (type) {
+      case 'system':
+        return 'warning-system';
+      case 'hardware':
+        return 'warning-hardware';
+      case 'sensordata':
+        return 'warning-sensordata';
+      default:
+        return ''; // Default class or you can define a specific class for unknown types
+    }
   };
 
   return (
@@ -59,6 +69,7 @@ const WarningsMonitor: React.FC = () => {
         <thead>
           <tr>
             <th>Message</th>
+            <th>Timestamp</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -66,6 +77,7 @@ const WarningsMonitor: React.FC = () => {
           {warnings.map((warning) => (
             <tr key={warning.id} className={getWarningClass(warning.type)}>
               <td>{warning.message}</td>
+              <td>{warning.timestamp}</td>
               <td>
                 <button className='button' onClick={() => handleDelete(warning.id)}>Delete</button>
               </td>

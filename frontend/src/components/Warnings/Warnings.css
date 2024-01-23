@@ -11,12 +11,17 @@
 }
 
 .warning-system {
-  background-color: rgb(55, 174, 63);
+  background-color: #4c956d;
   color: rgb(0, 0, 0);
 }
 
 .warning-hardware {
-  background-color: rgb(140, 205, 162);
+  background-color: #4c956d;
+  color: rgb(0, 0, 0);
+}
+
+.warning-sensordata {
+  background-color: rgb(173, 19, 19);
   color: rgb(0, 0, 0);
 }
 

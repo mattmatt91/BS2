@@ -73,7 +73,7 @@ const ParameterComponent: React.FC = () => {
     }
   };
 
-  const debouncedHandleChange = debounce(handleChange, 500);
+  const debouncedHandleChange = debounce(handleChange, 1000);
 
   const handleInputChange = (paramName: string, newValue: boolean | number | string) => {
     setCurrentValues({ ...currentValues, [paramName]: newValue });

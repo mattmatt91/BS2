@@ -2,7 +2,7 @@ import bme680
 
 
 class Sensor:
-    def __init__(self, sensor_type="BME", pin=2):
+    def __init__(self):
         try:
             self.sensor = bme680.BME680(0x77)
         except (RuntimeError, IOError):

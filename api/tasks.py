@@ -8,6 +8,7 @@ from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.date import DateTrigger
 from converter_functions import ConverterFuncitons
 from datetime import datetime
+from data_check import DataCheck
 
 DATABASE_URL = config["URLS"]["DATABASE_URL"]
 schedule_intervals = config["schedule_intervals"]
@@ -18,7 +19,7 @@ pin_assignment_sensors = config["pin_assignment_sensors"]
 class Tasks:
     def __init__(self) -> None:
         self.scheduler = AsyncIOScheduler()
-        self.sensor = Sensor(pin=pin_assignment_sensors["DHT"])
+        self.sensor = Sensor()
         self.relais = Relais(pin_assignment_relais)
         self.cam = Cam()
         self.sensorwater = SensorWater()
@@ -29,7 +30,7 @@ class Tasks:
         # measure data
         self.scheduler.add_job(
             self.measure_data,
-            trigger=IntervalTrigger(minutes=schedule_intervals["measure_data"]),
+            trigger=IntervalTrigger(seconds=schedule_intervals["measure_data"]),
         )
 
         # update water
@@ -111,6 +112,10 @@ class Tasks:
     async def measure_data(self):
         data = await self.sensor_data()
         sensor_data = ConverterFuncitons.convert_to_sensor_data(data)
+        warnings = DataCheck.check_sensor_data(sensor_data)
+        for w in warnings:
+            print(warnings)
+            await self.add_warning({"message": w, "type": "sensordata"})
         requests.post(f"{DATABASE_URL}/add_sensor_data", json=sensor_data)
 
     async def toggle_lamp_on(self):
@@ -170,3 +175,26 @@ class Tasks:
                 DateTrigger(run_date=run_time),
                 args=[{pump: False}],
             )
+
+    async def add_warning(self, warning: dict):
+        try:
+
+            response = requests.post(f"{DATABASE_URL}/add_warning", json=warning)
+            return {"info": f"added warning succesful!"}
+        except Exception as e:
+            print(e)
+            return {"error": "error while ading warning"}
+
+    async def delete_warning(self, id: int):
+        try:
+            requests.delete(f"{DATABASE_URL}/delete_warning/{id}")
+            return {"info": f"deleted warning #{id} succesful"}
+        except:
+            return {"error": "error while deleting warning"}
+
+    async def get_warnings(self):
+        try:
+            data = requests.get(f"{DATABASE_URL}/get_warnings")
+            return data
+        except:
+            return {"error": "error while reading wanings"}

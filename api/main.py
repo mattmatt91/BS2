@@ -15,7 +15,6 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from authentification import Auhtentification, UserInDB
 import os
 import io
-from warningmanager import WarningManager
 
 # Configuration
 param_config = config["param_config"]
@@ -28,7 +27,6 @@ with open("credentials.json", "r") as file:
 
 app = FastAPI()
 tasks = Tasks()
-warning_manager = WarningManager()
 
 
 # Middleware (CORS)
@@ -48,6 +46,8 @@ async def start_tasks():
         await tasks.set_parameter(ParameterModel(**param_values), init=True)
 
     await tasks.start_scheduler()
+
+    await tasks.add_warning({"message": "API restarted", "type": "system"})
 
 
 # User Registration
@@ -103,6 +103,12 @@ async def api_set_parameter(
         data = new_parameter[param.parameter]
         data["value"] = param.value
         await tasks.set_parameter(ParameterModel(**data))
+        await tasks.add_warning(
+            {
+                "message": f"{param.parameter} set to {str(param.value)}",
+                "type": "system",
+            }
+        )
 
 
 @app.get("/parameter")
@@ -131,7 +137,7 @@ async def get_data(current_user: UserInDB = Depends(Auhtentification.get_current
 async def get_data(current_user: UserInDB = Depends(Auhtentification.get_current_user)):
     data = await tasks.get_data()
     data = data.json()
-
+    await tasks.add_warning({"message": f"Data downladed", "type": "system"})
     return StreamingResponse(
         ConverterFuncitons.generate_csv(data),
         media_type="text/csv",
@@ -145,17 +151,18 @@ async def download_video(
 ):
     video_path = "timelapse_video.mp4"  # Specify the video file path
     video_file_path = Timelapse.download_video(video_path)
+    await tasks.add_warning({"message": f"Viedeo downloaded", "type": "system"})
     return FileResponse(video_file_path, media_type="video/mp4", filename=video_path)
 
 
 @app.get("/warnings")
 async def get_data(current_user: UserInDB = Depends(Auhtentification.get_current_user)):
-    warning_list = warning_manager.get_warnings()
-    warning_list = [warning_list[i] for i in warning_list]
+    warning_list = await tasks.get_warnings()
+    warning_list = warning_list.json()
     return warning_list
 
 
-@app.delete("/warnings/{warning_id}")
+@app.delete("/delete_warning/{warning_id}")
 async def delete_warning(warning_id: int):
-    warning_manager.delete_warning(warning_id)
+    await tasks.delete_warning(warning_id)
     return {"message": "Warning deleted successfully"}

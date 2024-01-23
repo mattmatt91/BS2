@@ -50,7 +50,7 @@ export function getWarnings(){
 export function deleteWarning(warningId: number) {
   const token = localStorage.getItem('token');
   const apiUrl = process.env.REACT_APP_API_HOSTNAME;
-  const endpoint = `${apiUrl}/warnings/${warningId}`;
+  const endpoint = `${apiUrl}/delete_warning/${warningId}`;
   return fetch(endpoint, {
     method: 'DELETE',
     headers: {
