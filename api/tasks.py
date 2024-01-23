@@ -30,7 +30,7 @@ class Tasks:
         # measure data
         self.scheduler.add_job(
             self.measure_data,
-            trigger=IntervalTrigger(minutes=schedule_intervals["measure_data"]),
+            trigger=IntervalTrigger(seconds=schedule_intervals["measure_data"]),
         )
 
         # update water
@@ -112,7 +112,8 @@ class Tasks:
     async def measure_data(self):
         data = await self.sensor_data()
         sensor_data = ConverterFuncitons.convert_to_sensor_data(data)
-        warnings = DataCheck.check_sensor_data(sensor_data)
+        parameter = await self.get_parameter()
+        warnings = DataCheck.check_sensor_data(sensor_data, parameter)
         for w in warnings:
             print(warnings)
             await self.add_warning({"message": w, "type": "sensordata"})

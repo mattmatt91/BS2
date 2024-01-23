@@ -126,7 +126,7 @@ class Database:
     # warning stuff
     def warning_exists(self, warning_type: str, warning_message: str) -> bool:
         cursor = self.conn.execute(
-            "SELECT COUNT(*) FROM warnings WHERE type = ? AND message = ?",
+            "SELECT COUNT(*) FROM warnings WHERE type = sensordata AND message = ?",
             (
                 warning_type,
                 warning_message,
