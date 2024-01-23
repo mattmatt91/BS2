@@ -45,9 +45,8 @@ async def start_tasks():
     for param_name, param_values in param_config.items():
         await tasks.set_parameter(ParameterModel(**param_values), init=True)
 
-    await tasks.start_scheduler()
-
     await tasks.add_warning({"message": "API restarted", "type": "system"})
+    await tasks.start_scheduler()
 
 
 # User Registration

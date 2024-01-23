@@ -97,7 +97,7 @@ class Tasks:
             hour_off = 12
         else:
             hour_off = 18
-        print(f"from update light: seconds = {hour_off}, lamp = {lamp}")
+        # print(f"from update light: seconds = {hour_off}, lamp = {lamp}")
         job = self.scheduler.get_job("lamp_off")
         if job:
             job.reschedule(trigger=CronTrigger(hour=hour_off))
@@ -115,7 +115,7 @@ class Tasks:
         parameter = await self.get_parameter()
         warnings = DataCheck.check_sensor_data(sensor_data, parameter)
         for w in warnings:
-            print(warnings)
+            # print(warnings)
             await self.add_warning({"message": w, "type": "sensordata"})
         requests.post(f"{DATABASE_URL}/add_sensor_data", json=sensor_data)
 
@@ -148,9 +148,7 @@ class Tasks:
         img = self.cam.capture()
         return self.cam.format_for_serving(img)
 
-    async def update_water(
-        self,
-    ):
+    async def update_water(self):
         sensordata = ConverterFuncitons.convert_to_sensor_data(await self.sensor_data())
         cmd = {}
         # chekc pH

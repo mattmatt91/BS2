@@ -126,7 +126,7 @@ class Database:
     # warning stuff
     def warning_exists(self, warning_type: str, warning_message: str) -> bool:
         cursor = self.conn.execute(
-            "SELECT COUNT(*) FROM warnings WHERE type = sensordata AND message = ?",
+            "SELECT COUNT(*) FROM warnings WHERE type = ? AND message = ?",
             (
                 warning_type,
                 warning_message,
@@ -160,10 +160,13 @@ class Database:
         self.conn.commit()
 
     def get_warnings(self):
+
         cursor = self.conn.execute("SELECT * FROM warnings")
         rows = cursor.fetchall()
         columns = [column[0] for column in cursor.description]
-        return [dict(zip(columns, row)) for row in rows]
+        warnings = [dict(zip(columns, row)) for row in rows]
+        print(f"from db: {warnings}")
+        return warnings
 
     def close(self):
         self.conn.close()
