@@ -30,7 +30,7 @@ class Tasks:
         # measure data
         self.scheduler.add_job(
             self.measure_data,
-            trigger=IntervalTrigger(seconds=schedule_intervals["measure_data"]),
+            trigger=IntervalTrigger(minutes=schedule_intervals["measure_data"]),
         )
 
         # update water

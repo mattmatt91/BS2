@@ -124,10 +124,26 @@ class Database:
         return parameters
 
     # warning stuff
-    def add_warning(self, warning):
+    def warning_exists(self, warning_type: str, warning_message: str) -> bool:
+        cursor = self.conn.execute(
+            "SELECT COUNT(*) FROM warnings WHERE type = ? AND message = ?",
+            (
+                warning_type,
+                warning_message,
+            ),
+        )
+        count = cursor.fetchone()[0]
+        return count > 0
+
+    def add_warning(self, warning: dict):
+        # Check if a warning with the same type and message already exists
+        if self.warning_exists(warning["type"], warning["message"]):
+            # Skip adding or update the existing warning
+            return
+
+        # Add new warning
         warning["timestamp"] = datetime.now().strftime("%d.%m.%Y %H:%M:%S")
         warning["isRead"] = False
-        print(f"form warnings: {warning}")
         self.conn.execute(
             "INSERT INTO warnings (message, type, isRead, timestamp) VALUES (?, ?, ?, ?)",
             (
