@@ -6,7 +6,7 @@ import Monitor from './components/Monitor/Monitor';
 import Data from './components/Data/Data';
 import Preferences from './components/Preferences/Preferences';
 import Video from './components/Video/Videos';
-import Error from './components/Warnings/Warnings';
+import Warnings from './components/Warnings/Warnings';
 import Authentication from './components/Authentification/Authentification';
 import {TOKEN_KEY} from './const'
 
@@ -40,7 +40,7 @@ const App: React.FC = () => {
       case 3:
         return <Video />;
       case 4:
-        return <Error />;
+        return <Warnings />;
       default:
         return null;
     }

@@ -2,27 +2,27 @@ import React from 'react';
 import './Header.css';
 
 interface HeaderProps {
-  activeButton: number;
-  onButtonClick: (buttonIndex: number) => void;
+  activeButton: number;  // Renamed from activeOption
+  onButtonClick: (buttonIndex: number) => void;  // Renamed from onOptionChange
 }
 
 const Header: React.FC<HeaderProps> = ({ activeButton, onButtonClick }) => {
-  const buttonLabels = ["Monitor", "Data", "Preferences", "Video", "Warnings"];
+  const options = ["Monitor", "Data", "Preferences", "Video", "Warnings"];
+
+  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    onButtonClick(parseInt(event.target.value, 10));  // Renamed from onOptionChange
+  };
 
   return (
     <div className="header">
       <img src="/logo.png" alt="Logo" className="logo" />
-      <div className="buttons-container">
-        {buttonLabels.map((label, index) => (
-          <button
-            key={index}
-            className={`button ${activeButton === index ? 'active' : ''}`}
-            onClick={() => onButtonClick(index)}
-          >
+      <select className="dropdown" value={activeButton} onChange={handleChange}>
+        {options.map((label, index) => (
+          <option key={index} value={index}>
             {label}
-          </button>
+          </option>
         ))}
-      </div>
+      </select>
     </div>
   );
 };

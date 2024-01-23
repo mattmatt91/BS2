@@ -16,12 +16,12 @@
 }
 
 .warning-hardware {
-  background-color: #4c956d;
+  background-color: #ffea00c2;
   color: rgb(0, 0, 0);
 }
 
 .warning-sensordata {
-  background-color: rgb(173, 19, 19);
+  background-color: rgba(173, 19, 19, 0.715);
   color: rgb(0, 0, 0);
 }
 

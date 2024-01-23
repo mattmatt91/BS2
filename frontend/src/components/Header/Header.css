@@ -1,6 +1,6 @@
 .header {
   display: flex;
-  align-items: center;
+  align-items: left;
   height: 10%;
 }
 
@@ -11,19 +11,15 @@
   object-fit: cover; /* Ensure the image covers the area */
 }
 
-.buttons-container {
-  display: flex;
-  flex: 1;
+.dropdown {
+  font-size: 16px;
+  width: 100%;
+  padding: 8px;
+  margin: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
-.header button {
-  flex: 1;
-  background-color: #4c956d;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-.header .buttons-container .button.active {
-  background-color: #468b61; /* Example active style */
+.dropdown option {
+  padding: 8px;
 }
