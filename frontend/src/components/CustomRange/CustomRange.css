@@ -1,0 +1,41 @@
+/* CustomRange.css */
+.range-slider {
+    margin: 20px 0;
+    padding: 0;
+    width: 100%;
+    position: relative;
+  }
+
+  .range-slider-track {
+    height: 4px;
+    width: 100%;
+    background-color: #ddd;
+    border-radius: 2px;
+    position: relative;
+  }
+
+  .range-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background-color: #4c956d;
+    cursor: pointer;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .range-slider-thumb:hover {
+    opacity: 1; /* Full opacity on hover */
+  }
+
+  .range-slider-thumb::after {
+    content: '';
+    display: block;
+    height: 100%;
+    width: 100%;
+    background-color: transparent;
+    border-radius: 50%;
+  }

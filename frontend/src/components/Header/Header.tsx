@@ -7,7 +7,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ activeButton, onButtonClick }) => {
-  const options = ["Monitor", "Data", "Preferences", "Video", "Warnings"];
+  const options = ["Monitor", "Data", "Preferences", "Video", "Warnings", "Test"];
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     onButtonClick(parseInt(event.target.value, 10));  // Renamed from onOptionChange

@@ -20,11 +20,11 @@ const ParameterComponent: React.FC = () => {
     const fetchParameters = async () => {
       try {
         const response = await API.getPreferences()
-        console.log(response)
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
+        console.log(data)
         setParameters(data);
         setCurrentValues(data.reduce((acc: any, param: Parameter) => {
           if (param.datatype === 'Bool') {

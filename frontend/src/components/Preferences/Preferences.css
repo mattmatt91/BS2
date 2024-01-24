@@ -25,3 +25,23 @@
     align-self: center; /* Vertically centers the control */
     width: 100%; /* Sets the width of controls to fill their container */
 }
+
+
+.track {
+    height: 6px;
+    background: #ddd;
+    border-radius: 3px;
+  }
+
+  .thumb {
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+  }
+
+  .range-values {
+    display: flex;
+    justify-content: space-between;
+  }

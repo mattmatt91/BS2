@@ -4,6 +4,7 @@ import './App.css';
 import Header from './components/Header/Header';
 import Monitor from './components/Monitor/Monitor';
 import Data from './components/Data/Data';
+import Test from './components/Test/Test';
 import Preferences from './components/Preferences/Preferences';
 import Video from './components/Video/Videos';
 import Warnings from './components/Warnings/Warnings';
@@ -14,11 +15,12 @@ const App: React.FC = () => {
   const [activeButton, setActiveButton] = useState(0);
   const [authToken, setAuthToken] = useState<string | null>(null);
 
-  useEffect(()=>{
-    if(authToken == undefined){
-      setAuthToken(localStorage.getItem(TOKEN_KEY))
+  useEffect(() => {
+    if (authToken == undefined) {
+      setAuthToken(localStorage.getItem(TOKEN_KEY));
     }
-  },[authToken])
+  }, [authToken]);
+
 
   const handleLogin = (token: string) => {
     setAuthToken(token);
@@ -41,6 +43,8 @@ const App: React.FC = () => {
         return <Video />;
       case 4:
         return <Warnings />;
+      case 5:
+        return <Test />;
       default:
         return null;
     }
