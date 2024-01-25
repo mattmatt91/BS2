@@ -9,7 +9,7 @@ const Test: React.FC = () => {
   return (
     <div>
       <h2>Custom Range Slider</h2>
-      <CustomRange min={0} max={100} onChange={handleRangeChange} />
+      <CustomRange min={10} max={200} values={[30, 100]} onChange={handleRangeChange} />
     </div>
   );
 };

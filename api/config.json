@@ -3,7 +3,7 @@
         "Temperature": {
             "parameter": "Temperature",
             "datatype": "Float",
-            "value": 23.5,
+            "value": {"min":20, "max":25},
             "min_value": 15,
             "max_value": 30
         },
@@ -19,14 +19,14 @@
         "pH": {
             "parameter": "pH",
             "datatype": "Float",
-            "value": 6.5,
-            "min_value": 5.5,
+            "value": {"min":6, "max":7},
+            "min_value": 5,
             "max_value": 7.5
         },
         "ec": {
             "parameter": "ec",
             "datatype": "Float",
-            "value": 750,
+            "value": {"min":600, "max":800},
             "min_value": 500,
             "max_value": 1000
         },

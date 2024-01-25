@@ -21,7 +21,7 @@ class SensorData(BaseModel):
 class ParameterData(BaseModel):
     parameter: str
     datatype: str
-    value: Union[float, bool, str]
+    value: Union[float, bool, str, dict]
     min_value: Optional[float] = None
     max_value: Optional[float] = None
     entrys: List[str] = []

@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import './Preferences.css';
 import * as API from '../../service/api';
 import { debounce } from 'lodash';
+import CustomRange from '../CustomRange/CustomRange'; // Adjust the path as necessary
 
 interface Parameter {
   parameter: string;
   datatype: 'Bool' | 'Float' | 'Int' | 'String';
-  value: boolean | number | string;
+  value: boolean | number | string | { min: number; max: number };
   min_value?: number;
   max_value?: number;
   entrys?: string[];
@@ -19,12 +20,12 @@ const ParameterComponent: React.FC = () => {
   useEffect(() => {
     const fetchParameters = async () => {
       try {
-        const response = await API.getPreferences()
+        const response = await API.getPreferences();
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
-        console.log(data)
+        console.log(data);
         setParameters(data);
         setCurrentValues(data.reduce((acc: any, param: Parameter) => {
           if (param.datatype === 'Bool') {
@@ -42,18 +43,22 @@ const ParameterComponent: React.FC = () => {
     fetchParameters();
   }, []);
 
-  const handleChange = async (paramName: string, newValue: boolean | number | string) => {
+  const handleChange = async (paramName: string, newValue: boolean | number | string, minValue?: number, maxValue?: number) => {
     const apiUrl = process.env.REACT_APP_API_HOSTNAME;
     const endpoint = `${apiUrl}/set_parameter`;
     try {
       const token = localStorage.getItem('token');
+      const body = minValue !== undefined && maxValue !== undefined
+        ? { parameter: paramName, min: minValue, max: maxValue }
+        : { parameter: paramName, value: newValue };
+
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({ parameter: paramName, value: newValue }),
+        body: JSON.stringify(body),
       });
 
       if (!response.ok) {
@@ -75,9 +80,17 @@ const ParameterComponent: React.FC = () => {
 
   const debouncedHandleChange = debounce(handleChange, 1000);
 
-  const handleInputChange = (paramName: string, newValue: boolean | number | string) => {
-    setCurrentValues({ ...currentValues, [paramName]: newValue });
-    debouncedHandleChange(paramName, newValue);
+  const handleInputChange = (paramName: string, newValue: boolean | number | string | number[]) => {
+    if (Array.isArray(newValue)) {
+      // For 'Float' and 'Int', newValue is an array [minValue, maxValue]
+      const [minValue, maxValue] = newValue;
+      setCurrentValues({ ...currentValues, [paramName]: `${minValue} - ${maxValue}` });
+      debouncedHandleChange(paramName, minValue, maxValue); // Pass min and max as separate arguments
+    } else {
+      // For other types
+      setCurrentValues({ ...currentValues, [paramName]: newValue });
+      debouncedHandleChange(paramName, newValue);
+    }
   };
 
   return (
@@ -93,8 +106,8 @@ const ParameterComponent: React.FC = () => {
     </div>
   );
 };
-
-const renderControl = (param: Parameter, handleInputChange: Function, currentValue: boolean | number | string) => {
+const renderControl = (param: Parameter, handleInputChange: Function, currentValue: boolean | number | string | { min: number; max: number }) => {
+  console.log(param)
   switch (param.datatype) {
     case 'Bool':
       return (
@@ -102,20 +115,25 @@ const renderControl = (param: Parameter, handleInputChange: Function, currentVal
           {currentValue.toString()}
         </button>
       );
-    case 'Float':
-    case 'Int':
-      return (
-        <>
-          <input
-            type="range"
-            min={param.min_value}
-            max={param.max_value}
-            value={currentValue as number}
-            onChange={(e) => handleInputChange(param.parameter, parseFloat(e.target.value))}
-          />
-          <span>{currentValue}</span>
-        </>
-      );
+      case 'Float':
+        case 'Int':
+         // Convert min_value and max_value to numbers
+         const minRange = parseFloat(param.min_value !== undefined ? param.min_value.toString() : '0') || 0;
+         const maxRange = parseFloat(param.max_value !== undefined ? param.max_value.toString() : '100') || 100;
+
+
+         const rangeValues = typeof currentValue === 'object' && currentValue !== null
+           ? [currentValue.min, currentValue.max]
+           : [minRange, maxRange];
+
+         return (
+           <CustomRange
+             min={minRange}
+             max={maxRange}
+             values={rangeValues}
+             onChange={(minValue, maxValue) => handleInputChange(param.parameter, { min: minValue, max: maxValue })}
+           />
+         );
     case 'String':
       return (
         <select
