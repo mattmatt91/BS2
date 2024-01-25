@@ -1,27 +1,30 @@
 .preferences-container {
-    display: grid;
-    grid-template-columns: 1fr 2fr; /* Adjust the ratio of columns as needed */
-    gap: 10px; /* Space between rows and columns */
-    max-width: 600px; /* Adjust the maximum width as needed */
-    margin: auto; /* Centering the grid */
+  display: grid;
+  gap: 10px; /* Space between rows */
+  max-width: 600px; /* Adjust the maximum width as needed */
+  margin: auto; /* Centering the grid */
 }
 
 .preference-row {
-    display: contents; /* Makes the children (label and control) part of the grid */
-    padding-top: 10px; /* Padding at the top of each row */
-    padding-bottom: 10px; /* Padding at the bottom of each row */
-    line-height: 50px;
+  padding-top: 10px; /* Padding at the top of each row */
+  padding-bottom: 10px; /* Padding at the bottom of each row */
 }
 
 .preference-label {
-    grid-column: 1; /* Places the label in the first column */
-    text-align: right; /* Right aligns the text of labels */
-    padding-right: 10px; /* Space between the label and the control */
-    align-self: center; /* Vertically centers the label */
+  grid-column: 1; /* Places the label in the first column */
+  text-align: right; /* Right aligns the text of labels */
+  padding-right: 10px; /* Space between the label and the control */
+   /*align-self: center; Vertically centers the label */
 }
 
 .preference-control {
-    grid-column: 2; /* Places the control in the second column */
-    align-self: center; /* Vertically centers the control */
-    width: 100%; /* Sets the width of controls to fill their container */
+  grid-column: 2; /* Places the control in the second column */
+  align-self: center; /* Vertically centers the control */
+  width: 100%; /* Sets the width of controls to fill their container */
+}
+
+.hr-divider {
+  border: none;
+  border-top: 1px solid #00ac2e;
+  margin: 10px 0;
 }
