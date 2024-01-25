@@ -44,6 +44,7 @@
 .range-values-display {
     display: flex;
     justify-content: space-between; /* Aligns children to opposite ends */
+    padding-top: 10px;
 }
 
 .range-values-display .min-value,
