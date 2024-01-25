@@ -48,7 +48,7 @@ input[type='range']::-webkit-slider-thumb {
   appearance: none;
   width: 20px; /* Width of the thumb */
   height: 20px; /* Height of the thumb */
-  background: #4c956d; /* Thumb color */
+  background: #6ab178; /* Thumb color */
   cursor: pointer; /* Cursor change */
   border-radius: 50%; /* Make it circular */
 }
@@ -67,7 +67,7 @@ select {
   padding: 8px 12px; /* Padding */
   border: 1px solid #ccc; /* Border */
   border-radius: 4px; /* Rounded corners */
-  background-color: #6ab178;
+  background-color: #ddd;
   color: #333; /* Text color */
   -webkit-appearance: none; /* Remove default styles for WebKit browsers */
   -moz-appearance: none; /* Remove default styles for Mozilla browsers */

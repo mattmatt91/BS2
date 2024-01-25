@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Range } from 'react-range';
 import './CustomRange.css'; // Import the CSS file
 import { debounce } from 'lodash';
-
 
 interface CustomRangeProps {
   min: number;
@@ -11,15 +10,12 @@ interface CustomRangeProps {
   onChange: (minValue: number, maxValue: number) => void;
 }
 
-
 const CustomRange: React.FC<CustomRangeProps> = ({ min, max, values, onChange }) => {
   const [rangeValues, setRangeValues] = useState<number[]>(values);
-
-  const debouncedOnChange = useCallback(
+  const [debouncedOnChange] = useState(() =>
     debounce((minValue: number, maxValue: number) => {
       onChange(minValue, maxValue);
-    }, 1000), // 500ms delay
-    [] // Dependencies array
+    }, 1000)
   );
 
   useEffect(() => {
@@ -48,6 +44,10 @@ const CustomRange: React.FC<CustomRangeProps> = ({ min, max, values, onChange })
           <div {...props} className="range-slider-thumb" style={props.style} />
         )}
       />
+      <div className="range-values-display">
+      <div className="min-value">Min: {rangeValues[0]}</div>
+      <div className="max-value">Max: {rangeValues[1]}</div>
+      </div>
     </div>
   );
 };

@@ -19,7 +19,7 @@
     appearance: none;
     width: 20px;
     height: 20px;
-    background-color: #4c956d;
+    background-color: #6ab178;
     cursor: pointer;
     border-radius: 50%;
     position: absolute;
@@ -38,4 +38,16 @@
     width: 100%;
     background-color: transparent;
     border-radius: 50%;
+  }
+
+
+.range-values-display {
+    display: flex;
+    justify-content: space-between; /* Aligns children to opposite ends */
+}
+
+.range-values-display .min-value,
+.range-values-display .max-value {
+    /* Add styling for min and max value labels */
+     /* margin-right: 50px;Adjust the value as needed */
   }

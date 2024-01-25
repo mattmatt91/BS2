@@ -3,8 +3,9 @@ import './Preferences.css';
 import * as API from '../../service/api';
 import { debounce } from 'lodash';
 import CustomRange from '../CustomRange/CustomRange'; // Adjust the path as necessary
+import ParameterRow from './ParameterRow';
 
-interface Parameter {
+export interface Parameter {
   parameter: string;
   datatype: 'Bool' | 'Float' | 'Int' | 'String';
   value: boolean | number | string | { min: number; max: number };
@@ -96,17 +97,17 @@ const ParameterComponent: React.FC = () => {
   return (
     <div className="preferences-container">
       {parameters.map((param) => (
-        <div className="preference-row" key={param.parameter}>
-          <label className="preference-label">{param.parameter}:</label>
-          <div className="preference-control">
-            {renderControl(param, handleInputChange, currentValues[param.parameter])}
-          </div>
-        </div>
+        <ParameterRow
+          key={param.parameter}
+          param={param}
+          handleInputChange={handleInputChange}
+          currentValue={currentValues[param.parameter]}
+        />
       ))}
     </div>
   );
 };
-const renderControl = (param: Parameter, handleInputChange: Function, currentValue: boolean | number | string | { min: number; max: number }) => {
+export const renderControl = (param: Parameter, handleInputChange: Function, currentValue: any) => {
   console.log(param)
   switch (param.datatype) {
     case 'Bool':
