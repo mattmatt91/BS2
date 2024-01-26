@@ -70,7 +70,7 @@ class Tasks:
 
     async def sensor_data(self):
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        data = self.sensor.fetch_data()
+        data = await self.sensor.fetch_data()
         sensor_data = [{"sensor": "timestamp", "Value": current_time}]
         sensor_data += [{"sensor": k, "Value": v} for k, v in data.items()]
         relais_states = self.relais.get_states()
