@@ -1,6 +1,6 @@
 import requests
 from models import ParameterModel, ParameterUpdateModel
-from hardware import Sensor, Relais, Cam, SensorWater, config
+from hardware import Sensor, Relais, Cam, SensorWater, WaterRelais, config
 from datetime import datetime, timedelta
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.interval import IntervalTrigger
@@ -13,6 +13,7 @@ from data_check import DataCheck
 DATABASE_URL = config["URLS"]["DATABASE_URL"]
 schedule_intervals = config["schedule_intervals"]
 pin_assignment_relais = config["pin_assignment_relais"]
+pin_assignment_relais_water = config["pin_assignment_relais_water"]
 pin_assignment_sensors = config["pin_assignment_sensors"]
 
 
@@ -23,6 +24,7 @@ class Tasks:
         self.relais = Relais(pin_assignment_relais)
         self.cam = Cam()
         self.sensorwater = SensorWater()
+        self.relaiswater = WaterRelais(pin_assignment_relais_water)
 
     async def start_scheduler(self):
         await self.init_lamp()
@@ -168,11 +170,11 @@ class Tasks:
 
     async def toggle_pump(self, cmd: dict):
         for pump in cmd:
-            self.relais.operate_relais({pump: True})
+            self.relaiswater.operate_relais({pump: True})
             # Calculate the future run time
             run_time = datetime.now() + timedelta(seconds=cmd[pump])
             self.scheduler.add_job(
-                self.relais.operate_relais,
+                self.relaiswater.operate_relais,
                 DateTrigger(run_date=run_time),
                 args=[{pump: False}],
             )

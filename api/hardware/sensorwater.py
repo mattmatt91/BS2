@@ -1,9 +1,9 @@
 # pip install adafruit-circuitpython-ads1x15
 import board
 import busio
-import adafruit_ads1x15.ads1015 as ADS
 from adafruit_ads1x15.analog_in import AnalogIn
 from adafruit_onewire.bus import OneWireBus
+import adafruit_ads1x15.ads1115 as ADS
 from adafruit_ds18x20 import DS18X20
 from WaterLevelSensor import WaterLevelSensor
 
@@ -12,12 +12,12 @@ class SensorWater:
     def __init__(self, sensor_config: {"GPIO_TRIGGER": 15, "GPIO": 16}) -> None:
         # ad stuff for ec and ph
         i2c = busio.I2C(board.SCL, board.SDA)
-        ads = ADS.ADS1015(i2c)
+        ads = ADS.ADS1115(i2c)
         self.chan_pH = AnalogIn(ads, ADS.P0)
         self.chan_ec = AnalogIn(ads, ADS.P1)
 
         # onewire stuff for watertemperature
-        ow_bus = OneWireBus(board.D5)
+        ow_bus = OneWireBus(board.D5)  #  ad to config
         self.ds18 = DS18X20(ow_bus, ow_bus.scan()[0])
 
         # init waterlevelsensor
@@ -25,6 +25,8 @@ class SensorWater:
             GPIO_ECHO=sensor_config["GPIO_ECHO"],
             GPIO_TRIGGER=sensor_config["GPIO_TRIGGER"],
         )
+
+        # init GPIO expander
 
     async def measure_data(self):
         temp_water = self.ds18.temperature
@@ -44,3 +46,7 @@ class SensorWater:
         TCF = 0.02  # constant
         ec = ec_measured * (1 + TCF * (temp_water - 25))
         return ec
+
+
+# pip3 install adafruit-circuitpython-ads1x15
+# pip3 install pcf8574-io
