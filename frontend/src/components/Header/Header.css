@@ -12,7 +12,9 @@
 }
 
 .dropdown {
-  font-size: 16px;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 20px;
   width: 100%;
   padding: 8px;
   margin: 10px;

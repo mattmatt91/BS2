@@ -50,7 +50,7 @@ const Data: React.FC = () => {
 
   const organizeData = (): PlotlyData[] => {
     const timestamps = sensorData.filter(item => item.sensor === 'timestamp').map(item => item.Value);
-    const sensorTypes = ['humidity', 'temperature', 'pressure', 'lamp_bloom', 'lamp_grow', 'fan', "pH", "ec", "temp_water"];
+    const sensorTypes = ['humidity', 'temperature', 'pressure', 'lamp_bloom', 'lamp_grow', 'fan', "pH", "ec", "temp_water", "waterlevel"];
 
     return sensorTypes.map(sensorType => {
       const sensorValues = sensorData.filter(item => item.sensor === sensorType).map(item => item.Value);

@@ -1,6 +1,7 @@
 import React from 'react';
 import { renderControl } from './Preferences'; // Adjust the path as necessary
 import { Parameter } from './Preferences'; // Import Parameter interface
+import './ParameterRow.css';
 
 interface ParameterRowProps {
   param: Parameter;
@@ -10,9 +11,13 @@ interface ParameterRowProps {
 
 const ParameterRow: React.FC<ParameterRowProps> = ({ param, handleInputChange, currentValue }) => {
   return (
+    <div className="component-wrapper">
     <>
       <div className="preference-row">
+        <h2>
+
         <label className="preference-label">{param.parameter}:</label>
+        </h2>
       </div>
       <div className="preference-row">
         <div className="preference-control">
@@ -21,7 +26,9 @@ const ParameterRow: React.FC<ParameterRowProps> = ({ param, handleInputChange, c
       </div>
       <hr className="hr-divider" />
     </>
+    </div>
   );
+
 };
 
 

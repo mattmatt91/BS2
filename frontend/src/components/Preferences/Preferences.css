@@ -3,6 +3,7 @@
   gap: 10px; /* Space between rows */
   max-width: 600px; /* Adjust the maximum width as needed */
   margin: auto; /* Centering the grid */
+
 }
 
 .preference-row {
@@ -21,10 +22,4 @@
   grid-column: 2; /* Places the control in the second column */
   align-self: center; /* Vertically centers the control */
   width: 100%; /* Sets the width of controls to fill their container */
-}
-
-.hr-divider {
-  border: none;
-  border-top: 1px solid #00ac2e;
-  margin: 10px 0;
 }

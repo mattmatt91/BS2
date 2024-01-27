@@ -70,16 +70,18 @@ class Tasks:
 
     async def sensor_data(self):
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        data = await self.sensor.fetch_data()
+        data = self.sensor.fetch_data()
         sensor_data = [{"sensor": "timestamp", "Value": current_time}]
         sensor_data += [{"sensor": k, "Value": v} for k, v in data.items()]
         relais_states = self.relais.get_states()
-        water_data = self.sensorwater.measure_data()
+        water_data = await self.sensorwater.measure_data()
         sensor_data += [{"sensor": k, "Value": v} for k, v in water_data.items()]
         sensor_data += [
             {"sensor": k, "Value": 1 if v else 0 if isinstance(v, bool) else v}
             for k, v in relais_states.items()
         ]
+        ConverterFuncitons.convert_to_sensor_data(sensor_data)
+
         return sensor_data
 
     async def set_parameter(self, param: ParameterModel, init=False):

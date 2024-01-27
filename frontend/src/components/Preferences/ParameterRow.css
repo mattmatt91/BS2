@@ -1,17 +1,12 @@
-.preference-row {
-    padding: 10px 0; /* Adjust padding as needed */
-  }
 
-  .preference-label {
-    /* Add any specific styles for the label */
-  }
-
-  .preference-control {
-    /* Add any specific styles for the control */
-  }
 
   .hr-divider {
-    border: none;
-    border-top: 1px solid #ccc;
-    margin: 10px 0; /* Adjust margin as needed */
+   color: #006e12;
+  }
+
+  .component-wrapper {
+    border: 1px solid #006e12; /* Example: 2px solid black border */
+    padding: 10px;         /* Padding inside the border */
+    margin: 10px;          /* Optional: Margin outside the border */
+    border-radius: 10px;
   }

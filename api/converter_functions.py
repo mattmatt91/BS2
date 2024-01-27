@@ -8,19 +8,14 @@ class ConverterFuncitons:
         for item in data_list:
             key = item["sensor"]
             value = item["Value"]
-            if key in ["humidity", "temperature", "pressure", "pH", "ec", "temp_water"]:
-                sensor_data[key] = float(value)
-            elif key in [
-                "lamp_bloom",
-                "lamp_grow",
-                "fan",
-                "pump_ph_up",
-                "pump_ph_down",
-                "pump_fertiliser",
-            ]:
+
+            if type(value) == int and value >= 0 and value <= 1:
                 sensor_data[key] = "True" if value == 1 else False
+            elif type(value) == float:
+                sensor_data[key] = float(value)
             else:
                 sensor_data[key] = value
+        print(sensor_data)
         return sensor_data
 
     def transform_data(data):
