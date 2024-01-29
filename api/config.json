@@ -96,7 +96,8 @@
         }
     },
     "pin_assignment_sensors": {
-        "DHT": 2
+        "waterlevel": {"GPIO_TRIGGER": 15, "GPIO": 16},
+        "watertemperature": "D5"
     },
     "watersystem_pump_durations": {
         "ec": 5,

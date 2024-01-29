@@ -1,0 +1,18 @@
+.hr-divider {
+    color: #006e12;
+  }
+
+  .value-display-wrapper {
+    border: 1px solid #006e12;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
+  }
+
+  .value-display-label {
+    /* Add styles for your label here if needed */
+  }
+
+  .value-display-content {
+    /* Add styles for the value display here if needed */
+  }

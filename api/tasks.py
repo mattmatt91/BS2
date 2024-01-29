@@ -20,10 +20,10 @@ pin_assignment_sensors = config["pin_assignment_sensors"]
 class Tasks:
     def __init__(self) -> None:
         self.scheduler = AsyncIOScheduler()
-        self.sensor = Sensor()
+        self.sensor = Sensor(pin_assignment_sensors)
         self.relais = Relais(pin_assignment_relais)
         self.cam = Cam()
-        self.sensorwater = SensorWater()
+        self.sensorwater = SensorWater(pin_assignment_sensors)
         self.relaiswater = WaterRelais(pin_assignment_relais_water)
 
     async def start_scheduler(self):
@@ -76,11 +76,16 @@ class Tasks:
         sensor_data = [{"sensor": "timestamp", "Value": current_time}]
         sensor_data += [{"sensor": k, "Value": v} for k, v in data.items()]
         relais_states = self.relais.get_states()
+        relais_states_water = self.relaiswater.get_states()
         water_data = await self.sensorwater.measure_data()
         sensor_data += [{"sensor": k, "Value": v} for k, v in water_data.items()]
         sensor_data += [
             {"sensor": k, "Value": 1 if v else 0 if isinstance(v, bool) else v}
             for k, v in relais_states.items()
+        ]
+        sensor_data += [
+            {"sensor": k, "Value": 1 if v else 0 if isinstance(v, bool) else v}
+            for k, v in relais_states_water.items()
         ]
         ConverterFuncitons.convert_to_sensor_data(sensor_data)
 

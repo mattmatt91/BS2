@@ -7,8 +7,9 @@
 .logo {
   height: 100%;
   width: auto;
-  border-radius: 50%; /* Make the image round */
+   /* border-radius: 50%;Make the image round */
   object-fit: cover; /* Ensure the image covers the area */
+  padding: 15px;
 }
 
 .dropdown {

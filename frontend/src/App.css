@@ -24,7 +24,7 @@
 }
 
 .button {
-  font-size: 20;
+  font-size: 20px;
   width: 100%; /* Button takes full width of the container */
   font-family: 'Courier New', sans-serif; /* Specify a default font family for the app */
   ; /* Maintains aspect ratio */
