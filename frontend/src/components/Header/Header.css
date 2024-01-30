@@ -1,15 +1,11 @@
-.header {
-  display: flex;
-  align-items: left;
-  height: 10%;
-}
+
 
 .logo {
   height: 100%;
   width: auto;
    /* border-radius: 50%;Make the image round */
   object-fit: cover; /* Ensure the image covers the area */
-  padding: 15px;
+  padding: 10px;
 }
 
 .dropdown {

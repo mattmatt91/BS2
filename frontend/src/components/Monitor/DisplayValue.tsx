@@ -28,15 +28,10 @@ const ValueDisplayRow: React.FC<ValueDisplayRowProps> = ({ name, value }) => {
 
   return (
 
-
-    <div className="value-display-wrapper">
-      <div className="value-display-row">
-        <h2>
-          <label className="value-display-label">{name}:</label>
-        </h2>
-      </div>
-      <div className="value-display-row">
-        <div className="value-display-content">
+    <div className="component-wrapper">
+      <div className="component-row">
+          <label className="component-label">{name}:</label>
+        <div className="component-value">
           {displayValue(value)}
         </div>
       </div>

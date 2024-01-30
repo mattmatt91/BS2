@@ -11,21 +11,17 @@ interface ParameterRowProps {
 
 const ParameterRow: React.FC<ParameterRowProps> = ({ param, handleInputChange, currentValue }) => {
   return (
-    <div className="component-wrapper">
-    <>
-      <div className="preference-row">
-        <h2>
 
-        <label className="preference-label">{param.parameter}:</label>
+    <div className="component-wrapper">
+      <div className="component-row">
+        <h2>
+        <label className="component-label">{param.parameter}:</label>
         </h2>
-      </div>
-      <div className="preference-row">
-        <div className="preference-control">
+        <div className="component-control">
           {renderControl(param, handleInputChange, currentValue)}
         </div>
       </div>
       <hr className="hr-divider" />
-    </>
     </div>
   );
 

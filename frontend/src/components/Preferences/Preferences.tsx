@@ -17,6 +17,7 @@ export interface Parameter {
 const ParameterComponent: React.FC = () => {
   const [parameters, setParameters] = useState<Parameter[]>([]);
   const [currentValues, setCurrentValues] = useState<{ [key: string]: boolean | number | string }>({});
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchParameters = async () => {
@@ -28,6 +29,7 @@ const ParameterComponent: React.FC = () => {
         const data = await response.json();
         console.log(data);
         setParameters(data);
+        setError(null);
         setCurrentValues(data.reduce((acc: any, param: Parameter) => {
           if (param.datatype === 'Bool') {
             acc[param.parameter] = param.datatype === 'Bool' ? param.value === '1' : param.value;
@@ -37,7 +39,8 @@ const ParameterComponent: React.FC = () => {
           return acc;
         }, {}));
       } catch (error) {
-        console.error('Error:', error);
+        console.error('Error fetching data:', error);
+        setError('Error fetching data. Please try again.');
       }
     };
 
@@ -95,7 +98,8 @@ const ParameterComponent: React.FC = () => {
   };
 
   return (
-    <div className="preferences-container">
+    <div className="components-wrapper">
+      {error && <div className="error-message">Error: {error}</div>}
       {parameters.map((param) => (
         <ParameterRow
           key={param.parameter}

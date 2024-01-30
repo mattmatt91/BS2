@@ -2,32 +2,87 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  font-family: 'Courier New', sans-serif; /* Specify a default font family for the app */
+  font-family: 'Courier New', sans-serif;
 }
 
 .header {
-  height: 10%;
+  align-items: center; /* Center content vertically */
+  height: 10vh; /* 10% of the viewport height */
   background-color: #6ab178;
   color: white;
   display: flex;
-  align-items: center;
   justify-content: center;
-  font-size: 24px; /* Larger font size for the header */
-  /*font-weight: bold; /* Bold font weight for the header */
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
 }
 
+
+
 .main {
+  margin-top: 10vh; /* Start main content right below the header */
   flex-grow: 1;
   background-color: #f0f0f0;
   padding: 20px;
-  font-size: 18px; /* Standard font size for main content */
+  overflow: auto; /* Add scrolling to the main content */
 }
+
+
+.components-wrapper {
+  display: grid;
+  gap: 10px; /* Space between rows */
+  max-width: 600px; /* Adjust the maximum width as needed */
+  margin: auto; /* Centering the grid */
+
+}
+
+.component-wrapper {
+  font-size: 20px;
+  border: 1px solid #006e12; /* Example: 2px solid black border */
+  padding: 10px;         /* Padding inside the border */
+  margin: 10px;          /* Optional: Margin outside the border */
+  border-radius: 10px;
+}
+
+.component-row {
+  padding-top: 10px; /* Padding at the top of each row */
+  padding-bottom: 10px; /* Padding at the bottom of each row */
+  padding-left: 10px; /* Padding at the bottom of each row */
+  padding-right: 10px; /* Padding at the bottom of each row */
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two columns of equal width */
+  align-items: center; /* Vertically aligns items in the center */
+}
+
+.error-message {
+  color: rgb(150, 1, 1);
+  /* Other styles for error message */
+}
+
+.hr-divider {
+  color: #006e12;
+
+ }
+
+ .value-true {
+  color: green;
+}
+
+.value-false {
+  color: red;
+}
+
+
 
 .button {
   font-size: 20px;
-  width: 100%; /* Button takes full width of the container */
   font-family: 'Courier New', sans-serif; /* Specify a default font family for the app */
-  ; /* Maintains aspect ratio */
+  width: 100%; /* Full-width */
+  border: 1px solid #ccc; /* Border */
+  border-radius: 10px; /* Rounded corners */
+  background-color: #ddd;
+  color: #333; /* Text color */
   padding-top: 10px; /* Padding at the top of the button */
   padding-bottom: 10px; /* Padding at the bottom of the button */
 }
@@ -66,9 +121,10 @@ select {
   font-size: 20px;
   font-family: 'Courier New', sans-serif; /* Specify a default font family for the app */
   width: 100%; /* Full-width */
-  padding: 8px 12px; /* Padding */
+  padding-top: 10px; /* Padding at the top of the button */
+  padding-bottom: 10px; /* Padding at the bottom of the button */
   border: 1px solid #ccc; /* Border */
-  border-radius: 4px; /* Rounded corners */
+  border-radius: 10px; /* Rounded corners */
   background-color: #ddd;
   color: #333; /* Text color */
   -webkit-appearance: none; /* Remove default styles for WebKit browsers */

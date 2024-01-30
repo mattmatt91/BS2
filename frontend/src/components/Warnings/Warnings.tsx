@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import './Warnings.css';
 import * as API from '../../service/api';
+import WarningRow from './WarningRow'; // Adjust the path as necessary
+
 
 interface Warning {
   id: number;
@@ -63,28 +65,11 @@ const WarningsMonitor: React.FC = () => {
   };
 
   return (
-    <div className="warnings-monitor">
+    <div className="components-wrapper">
       {error && <div className="error-message">Error: {error}</div>}
-      <table>
-        <thead>
-          <tr>
-            <th>Message</th>
-            <th>Timestamp</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {warnings.map((warning) => (
-            <tr key={warning.id} className={getWarningClass(warning.type)}>
-              <td>{warning.message}</td>
-              <td>{warning.timestamp}</td>
-              <td>
-                <button className='button' onClick={() => handleDelete(warning.id)}>Delete</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {warnings.map((warning) => (
+        <WarningRow key={warning.id} warning={warning} handleDelete={handleDelete} />
+      ))}
     </div>
   );
 };

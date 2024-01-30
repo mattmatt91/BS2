@@ -1,12 +1,14 @@
 
 
-  .hr-divider {
-   color: #006e12;
+  .component-label {
+    grid-column: 1 / -1; /* Span across all columns */
+    font-size: 1.2em; /* Larger font size */
+    font-weight: bold;
+    text-align: left;
   }
 
-  .component-wrapper {
-    border: 1px solid #006e12; /* Example: 2px solid black border */
-    padding: 10px;         /* Padding inside the border */
-    margin: 10px;          /* Optional: Margin outside the border */
-    border-radius: 10px;
+
+  .component-control{
+    grid-column: 1 / -1; /* Span across all columns */
+    font-size: 1.2em; /* Larger font size */
   }

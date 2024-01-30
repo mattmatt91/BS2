@@ -1,6 +1,4 @@
-.monitor {
-  margin: 20px;
-}
+
 
 
 
@@ -10,13 +8,4 @@
 
 .value-false {
   color: red;
-}
-
-
-.display-container {
-  display: grid;
-  gap: 10px; /* Space between rows */
-  max-width: 600px; /* Adjust the maximum width as needed */
-  margin: auto; /* Centering the grid */
-
 }

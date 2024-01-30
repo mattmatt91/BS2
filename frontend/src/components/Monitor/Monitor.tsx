@@ -37,20 +37,12 @@ const Monitor: React.FC = () => {
   }, []);
 
 
-
-
-
   return (
-    <div className="display-container">
-      {error && <div>Error: {error}</div>}
-      <table>
-    {sensorData.map((entry, index) => (
-            <tr key={index}>
-              <ValueDisplayRow name={entry.sensor} value={entry.Value} />
-            </tr>
-          ))}
-
-  </table>
+    <div className="components-wrapper">
+     {error && <div className="error-message">Error: {error}</div>}
+      {sensorData.map((entry, index) => (
+        <ValueDisplayRow name={entry.sensor} value={entry.Value} />
+      ))}
     </div>
   );
 };
