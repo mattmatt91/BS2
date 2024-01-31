@@ -98,7 +98,7 @@ const ParameterComponent: React.FC = () => {
   };
 
   return (
-    <div className="components-wrapper">
+    <div className="components-container">
       {error && <div className="error-message">Error: {error}</div>}
       {parameters.map((param) => (
         <ParameterRow

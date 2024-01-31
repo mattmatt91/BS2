@@ -65,7 +65,7 @@ const WarningsMonitor: React.FC = () => {
   };
 
   return (
-    <div className="components-wrapper">
+    <div className="components-container">
       {error && <div className="error-message">Error: {error}</div>}
       {warnings.map((warning) => (
         <WarningRow key={warning.id} warning={warning} handleDelete={handleDelete} />

@@ -5,8 +5,8 @@
     font-size: 1.2em; /* Larger font size */
     font-weight: bold;
     text-align: left;
+    padding-bottom: 10px;
   }
-
 
   .component-control{
     grid-column: 1 / -1; /* Span across all columns */

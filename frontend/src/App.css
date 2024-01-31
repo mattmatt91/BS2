@@ -29,7 +29,7 @@
 }
 
 
-.components-wrapper {
+.components-container {
   display: grid;
   gap: 10px; /* Space between rows */
   max-width: 600px; /* Adjust the maximum width as needed */

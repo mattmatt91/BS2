@@ -14,9 +14,7 @@ const ParameterRow: React.FC<ParameterRowProps> = ({ param, handleInputChange, c
 
     <div className="component-wrapper">
       <div className="component-row">
-        <h2>
         <label className="component-label">{param.parameter}:</label>
-        </h2>
         <div className="component-control">
           {renderControl(param, handleInputChange, currentValue)}
         </div>
