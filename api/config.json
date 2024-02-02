@@ -83,21 +83,21 @@
     },
     "pin_assignment_relais_water": {
         "pump_ph_up": {
-            "pin_o": 8,
-            "pin_i": 11
+            "pin_o": "p0",
+            "pin_i": "p1"
         },
         "pump_ph_down": {
-            "pin_o": 9,
-            "pin_i": 14
+            "pin_o": "p2",
+            "pin_i": "p3"
         },
         "pump_fertiliser": {
-            "pin_o": 10,
-            "pin_i": 15
+            "pin_o": "p4",
+            "pin_i": "p5"
         }
     },
     "pin_assignment_sensors": {
         "waterlevel": {"GPIO_TRIGGER": 15, "GPIO": 16},
-        "watertemperature": "D5"
+        "watertemperature": 5
     },
     "watersystem_pump_durations": {
         "ec": 5,

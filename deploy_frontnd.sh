@@ -8,7 +8,7 @@ DEST_DIR="/home/bs2/Desktop/bs2"
 # Folders to copy
 FOLDER1="frontend"
 
-ADDITIONAL_FILES=("docker-compose.yaml", ".env_prod")
+ADDITIONAL_FILES=("docker-compose.yaml" ".env_prod")
 
 copy_folder() {
     local folder=$1

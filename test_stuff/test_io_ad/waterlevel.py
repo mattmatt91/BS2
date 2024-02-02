@@ -41,7 +41,7 @@ class WaterLevelSensor:
 if __name__ == "__main__":
     # Example usage
     async def main():
-        sensor = WaterLevelSensor(GPIO_TRIGGER=15, GPIO_ECHO=14)
+        sensor = WaterLevelSensor(GPIO_TRIGGER=17, GPIO_ECHO=27)
         try:
             while True:
                 distance = await sensor.get_distance()

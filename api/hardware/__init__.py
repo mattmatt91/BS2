@@ -31,6 +31,6 @@ elif operating_mode == "raspi":
     from .relais import Relais as Relais
     from .cam import ImageCapturer as Cam
     from .sensorwater import SensorWater as SensorWater
-    from .waterrelais_mock import WaterRelaisMock as WaterRelais
+    from .waterrelais import WaterRelais as WaterRelais
 else:
     raise Exception("operating system must be mock or raspi")
