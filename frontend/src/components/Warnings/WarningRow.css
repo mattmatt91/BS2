@@ -1,0 +1,34 @@
+
+
+  .warning-message {
+    grid-column: 1 / -1; /* Span across all columns */
+    font-size: 1.2em; /* Larger font size */
+    padding-bottom: 50px; /* Padding below the message */
+  }
+
+  .warning-timestamp {
+    grid-column: 1; /* First column */
+    font-size: 1em; /* Smaller font size */
+    text-align: left; /* Align to the left */
+    padding-right: 10px; /* Space between the timestamp and the button */
+  }
+
+  .warning-action {
+    grid-column: 2; /* Second column */
+    text-align: right; /* Align to the right */
+  }
+
+
+
+  /* Styles for different warning types */
+  .warning-system {
+    border: 5px solid #006e12;
+  }
+
+  .warning-hardware {
+    border: 5px solid #f38f15; /* Light blue */
+  }
+
+  .warning-sensordata {
+    border: 5px solid #8a0505; /* Light green */
+  }

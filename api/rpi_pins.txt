@@ -1,0 +1,21 @@
+IO
+lamp_grow_o = 5
+lamp_grow_i = 12
+lamp_bloom_o = 6
+lamp_bloom_i = 16
+fan_o = 19
+fan_o = 21
+pump_o = 13
+pump_i = 20
+waterleve_TRIGGER = 27
+waterleve_ECHO = 17
+watertemperature = 4
+
+
+EXPANDER
+pump_ph_up_o = 0
+pump_ph_up_i = 1
+pump_ph_down_o = 2
+pump_ph_down_i = 3
+pump_fertiliser_o = 4
+pump_fertiliser_o = 5

@@ -1,14 +1,15 @@
 # Use Node.js as a base image
-FROM node:14-slim
+FROM node:16-slim
 
 # Set the working directory in the container
 WORKDIR /usr/src/app/
+
 
 # Copy package.json and package-lock.json
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install 
+RUN npm install
 # --only=production
 
 # Copy the production build directory and other necessary files

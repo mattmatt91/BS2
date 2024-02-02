@@ -2,9 +2,8 @@ import random
 
 
 class MockSensor:
-    def __init__(self, sensor_type="DHT", pin=2):
-        self.sensor = sensor_type
-        self.pin = pin
+    def __init__(self, sensor_comfig: dict):
+        pass
 
     def __del__(self):
         pass
@@ -18,7 +17,15 @@ class MockSensor:
         pressure = round(
             random.uniform(15, 30), 3
         )  # Random temperature in degrees Celsius
-        return {"humidity": humidity, "temperature": temperature, "pressure": pressure}
+        waterlevel = round(random.uniform(20, 25), 2)
+        return {
+            "humidity": humidity,
+            "temperature": temperature,
+            "pressure": pressure,
+            "waterlevel": waterlevel,
+        }
+
+        return
 
 
 # Example usage

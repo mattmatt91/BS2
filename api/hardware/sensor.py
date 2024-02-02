@@ -1,8 +1,11 @@
 import bme680
 
+# from WaterLevelSensor import WaterLevelSensor
+import random
+
 
 class Sensor:
-    def __init__(self):
+    def __init__(self, sensor_comfig: dict):
         try:
             self.sensor = bme680.BME680(0x77)
         except (RuntimeError, IOError):
@@ -12,6 +15,11 @@ class Sensor:
         self.sensor.set_pressure_oversample(bme680.OS_4X)
         self.sensor.set_temperature_oversample(bme680.OS_8X)
         self.sensor.set_filter(bme680.FILTER_SIZE_3)
+
+        # self.waterlevelsensor = WaterLevelSensor(
+        #     GPIO_ECHO=sensor_comfig["GPIO_ECHO"],
+        #     GPIO_TRIGGER=sensor_comfig["GPIO_TRIGGER"],
+        # )
 
     def __del__(self):
         # Destructor doesn't need to do anything special in this case
@@ -23,4 +31,11 @@ class Sensor:
             temperature = self.sensor.data.temperature
             humidity = self.sensor.data.humidity
             pressure = self.sensor.data.pressure
-        return {"humidity": humidity, "temperature": temperature, "pressure": pressure}
+            # waterlevel = self.waterlevelsensor.get_distance()
+            waterlevel = round(random.uniform(20, 25), 2)
+        return {
+            "humidity": humidity,
+            "temperature": temperature,
+            "pressure": pressure,
+            "waterlevel": waterlevel,
+        }

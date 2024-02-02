@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './Monitor.css';
 import * as API from '../../service/api'
+import ValueDisplayRow from "./DisplayValue"
 
 interface SensorData {
   sensor: string;
@@ -35,42 +36,13 @@ const Monitor: React.FC = () => {
     return () => clearInterval(intervalId);
   }, []);
 
-  const isTrueValue = (value: any) => {
-    return value === true || value === 1 || value === '1';
-  };
-
-  const isFalseValue = (value: any) => {
-    return value === false || value === 0 || value === '0';
-  };
-
-  const displayValue = (value: any) => {
-    if (isTrueValue(value)) {
-      return <span className="value-true">On</span>;
-    } else if (isFalseValue(value)) {
-      return <span className="value-false">Off</span>;
-    }
-    return value;
-  };
 
   return (
-    <div className="monitor">
-      {error && <div>Error: {error}</div>}
-      <table>
-    <thead>
-      <tr>
-        <th>Sensor</th>
-        <th>Value</th>
-      </tr>
-    </thead>
-    <tbody>
-    {sensorData.map((entry, index) => (
-            <tr key={index}>
-              <td>{entry.sensor}</td>
-              <td>{displayValue(entry.Value)}</td>
-            </tr>
-          ))}
-    </tbody>
-  </table>
+    <div className="components-container">
+     {error && <div className="error-message">Error: {error}</div>}
+      {sensorData.map((entry, index) => (
+        <ValueDisplayRow name={entry.sensor} value={entry.Value} />
+      ))}
     </div>
   );
 };

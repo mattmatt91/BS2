@@ -10,7 +10,8 @@ FOLDER1="frontend"
 FOLDER2="database"
 FOLDER3="api"
 
-ADDITIONAL_FILES=("docker-compose.yaml", ".env_prod")
+ADDITIONAL_FILES=("docker-compose.yaml" ".env_prod")
+
 
 copy_folder() {
     local folder=$1
